@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>Bold Portfolio</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: #ffffff; color: #111827; overflow-x: hidden; }
+    section { scroll-margin-top: 140px; }
+
+    .header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      max-width: calc(100vw - 24px);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .header-logo img {
+      height: 50px;
+      width: auto;
+      display: block;
+      max-width: 100%;
+    }
+
+    .header-nav { display: flex; gap: 24px; align-items: center; }
+
+    .header-nav a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #111827;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .header-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, orange, hotpink, purple);
+      transition: width .3s ease;
+    }
+
+    .header-nav a:hover::after { width: 100%; }
+
+    .header-cta {
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, orange, hotpink, purple);
+      color: white;
+      transition: transform .25s ease, box-shadow .25s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    .header-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .nav-dropdown{
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .nav-parent{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #111827;
+      font-size: 15px;
+      position: relative;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+
+    .nav-parent::after{
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, orange, hotpink, purple);
+      transition: width .3s ease;
+    }
+
+    .nav-dropdown:hover .nav-parent::after{ width: 100%; }
+
+    .nav-parent i{
+      font-size: 12px;
+      opacity: .75;
+      transform: translateY(1px);
+    }
+
+    .nav-menu{
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 0;
+      min-width: 220px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(17,24,39,0.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+      display: none;
+      z-index: 2000;
+    }
+
+    .nav-dropdown:hover .nav-menu{ display: block; }
+
+    .nav-menu a{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: #111827;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .nav-menu a:hover{
+      background: rgba(17,24,39,0.06);
+    }
+
+    .nav-menu::before{
+      content:"";
+      position:absolute;
+      top: -8px;
+      left: 18px;
+      width: 14px;
+      height: 14px;
+      background: rgba(255,255,255,0.92);
+      transform: rotate(45deg);
+      border-left: 1px solid rgba(17,24,39,0.08);
+      border-top: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .nav-dropdown::after{
+      content:"";
+      position:absolute;
+      left: 0;
+      top: 100%;
+      width: 240px;
+      height: 18px;
+    }
+
+    .nav-dropdown.open .nav-menu{ display:block; }
+
+    @media (max-width: 768px) {
+      .header-cta { display: none !important; }
+      .header-nav {
+        display: flex !important;
+        gap: 14px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .header { top: 16px; left: 12px; right: 12px; transform: none; }
+      .header-inner {
+        width: 100%;
+        gap: 12px;
+        padding: 10px 12px;
+        justify-content: flex-start;
+      }
+      .header-nav a,
+      .nav-parent { font-size: 14px; }
+      .nav-menu {
+        left: 0;
+        right: auto;
+        max-width: calc(100vw - 48px);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .header-nav { gap: 10px; }
+      .header-nav a,
+      .nav-parent { font-size: 13px; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    @media (max-width: 480px){
+      .container{ padding: 0 16px; }
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+
+    .btn-dark {
+      background: #111;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-dark:hover { background: #222; }
+
+    .btn-outline {
+      border: 2px solid #111;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: #111;
+      color: #fff;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-top: 140px;
+      overflow: hidden;
+    }
+
+    .hero-bg{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      overflow:hidden;
+    }
+
+    .hero-bg img,
+    .hero-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+    }
+
+    .capabilities,
+    .certifications{
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(900px 420px at 18% 18%, rgba(255,165,0,.10), transparent 60%),
+        radial-gradient(820px 420px at 82% 28%, rgba(236,72,153,.08), transparent 62%),
+        radial-gradient(980px 520px at 52% 92%, rgba(128,0,128,.10), transparent 66%),
+        linear-gradient(#ffffff, #ffffff);
+    }
+
+    .capabilities::before,
+    .certifications::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(17,24,39,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17,24,39,0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: .35;
+      mask-image: radial-gradient(circle at 50% 22%, black 45%, transparent 82%);
+      z-index: 0;
+    }
+
+    .capabilities .container,
+    .certifications .container{
+      position: relative;
+      z-index: 1;
+    }
+
+    .certifications { padding: 120px 0; }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      justify-items: center;
+    }
+
+    @media (max-width: 1100px) {
+      .cert-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .cert-grid { grid-template-columns: 1fr; }
+    }
+
+    .cert-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 28px 20px 24px;
+      border: 2px solid #e5e7eb;
+      transition: all .35s ease;
+      text-align: center;
+      width: 100%;
+      max-width: 260px;
+    }
+
+    .cert-card:hover {
+      transform: translateY(-8px);
+      border-color: orange;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .cert-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 18px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .cert-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .cert-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 12px;
+      color: #111827;
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg img { object-position: center 28%; }
+    }
+
+    .hero-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.30));
+      z-index:1;
+      pointer-events:none;
+    }
+
+    .blur-bg {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.2;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .blur-orange {
+      width: 380px;
+      height: 380px;
+      background: orange;
+      top: 80px;
+      right: 60px;
+    }
+
+    .blur-purple {
+      width: 260px;
+      height: 260px;
+      background: purple;
+      bottom: 80px;
+      left: 60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 40px;
+      position: relative;
+      z-index: 2;
+      align-items: center;
+      width: 100%;
+    }
+
+    @media (max-width: 980px){
+      .hero-grid{
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 24px;
+      color: #fff;
+      word-break: break-word;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, orange, hotpink, purple);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: rgba(255,255,255,.78);
+      max-width: 520px;
+      margin-bottom: 40px;
+      line-height: 1.55;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-outline.hero-outline{
+      border: 2px solid rgba(255,255,255,.55);
+      color: #fff;
+    }
+
+    .btn-outline.hero-outline:hover{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.75);
+      color: #fff;
+    }
+
+    @media (max-width: 768px){
+      section { scroll-margin-top: 110px; }
+      .hero { padding-top: 110px; min-height: 100svh; }
+      .hero h1 { font-size: clamp(36px, 11vw, 56px); margin-bottom: 14px; }
+      .hero p { font-size: 15px; margin-bottom: 18px; max-width: 100%; }
+      .btn { padding: 13px 20px; font-size: 15px; }
+      .blur-orange{ width: 260px; height: 260px; right: -80px; top: 40px; opacity:.18; }
+      .blur-purple{ width: 220px; height: 220px; left: -90px; bottom: 40px; opacity:.18; }
+    }
+
+    .hero-right{
+      position: relative;
+      min-width: 0;
+    }
+
+    .hero-stack-intro{
+      margin-bottom: 20px;
+      max-width: 540px;
+    }
+
+    .hero-stack-kicker{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.9);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-stack-kicker::before{
+      content:"";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, orange, hotpink);
+      box-shadow: 0 0 18px rgba(255,165,0,.55);
+    }
+
+    .hero-stack-copy{
+      margin-top: 12px;
+      color: rgba(255,255,255,.72);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .hero-stack-wrap{
+      position: relative;
+      height: 700px;
+      perspective: 1800px;
+      perspective-origin: center center;
+    }
+
+    .hero-stack-scene{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .hero-stack-card{
+      --tx: 0px;
+      --ty: 0px;
+      --tz: 0px;
+      --rz: 0deg;
+      --scale: 1;
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      padding: 1px;
+      background: linear-gradient(135deg,
+        rgba(255,165,0,.58),
+        rgba(236,72,153,.46),
+        rgba(128,0,128,.58)
+      );
+      transform-style: preserve-3d;
+      transform:
+        translate3d(var(--tx), var(--ty), var(--tz))
+        rotateZ(var(--rz))
+        scale(var(--scale));
+      transition:
+        transform 760ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 760ms cubic-bezier(0.22, 1, 0.36, 1),
+        filter 760ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 34px 90px rgba(0,0,0,.28);
+      will-change: transform, opacity, filter;
+      backface-visibility: hidden;
+      transform-origin: center center;
+    }
+
+    .hero-stack-card.is-front{
+      cursor: pointer;
+    }
+
+    .hero-stack-card.is-front:hover{
+      box-shadow: 0 42px 110px rgba(0,0,0,.36);
+    }
+
+    .hero-stack-card.is-front:hover .hero-stack-inner{
+      transform: translateY(-3px);
+    }
+
+    .hero-stack-card.is-outgoing{
+      pointer-events: none;
+    }
+
+    .hero-stack-card.is-incoming{
+      filter: saturate(1.06) brightness(1.02);
+    }
+
+    .hero-stack-inner{
+      height: 100%;
+      border-radius: 27px;
+      padding: 16px;
+      background:
+        radial-gradient(1000px 420px at 16% 0%, rgba(255,165,0,.14), transparent 55%),
+        radial-gradient(1000px 420px at 84% 0%, rgba(236,72,153,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hero-browser{
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(8,8,8,.54);
+      box-shadow: 0 18px 42px rgba(0,0,0,.32);
+    }
+
+    .hero-browser-top{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+    }
+
+    .hero-browser-dots{
+      display:flex;
+      gap:6px;
+    }
+
+    .hero-browser-dots span{
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+    }
+
+    .hero-browser-dots span:nth-child(1){ background:#ff5f57; }
+    .hero-browser-dots span:nth-child(2){ background:#ffbd2e; }
+    .hero-browser-dots span:nth-child(3){ background:#28c840; }
+
+    .hero-browser-address{
+      flex:1;
+      min-width:0;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.62);
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-browser-shot{
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow:hidden;
+      background: rgba(0,0,0,.35);
+    }
+
+    .hero-browser-shot img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      filter: contrast(1.08) saturate(1.08);
+    }
+
+    .hero-stack-body{
+      padding: 16px 2px 4px;
+    }
+
+    .hero-stack-topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom: 10px;
+    }
+
+    .hero-stack-label{
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+    }
+
+    .hero-stack-status{
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.72);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .hero-stack-title{
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .hero-stack-desc{
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .hero-stack-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom: 12px;
+    }
+
+    .hero-stack-pill{
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      color: rgba(255,255,255,.78);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .hero-stack-pill i{
+      font-size: 11px;
+    }
+
+    .hero-stack-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .hero-stack-link{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.92);
+      text-decoration:none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .hero-stack-link i{
+      width: 16px;
+      height: 16px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 6px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 10px;
+    }
+
+    .hero-stack-link:hover{
+      background: rgba(255,255,255,.14);
+    }
+
+    .hero-stack-note{
+      color: rgba(255,255,255,.58);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .hero-stack-hint{
+      margin-top: 18px;
+      text-align: center;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 980px){
+      .hero-stack-wrap{ height: 610px; }
+    }
+
+    @media (max-width: 640px){
+      .hero-stack-wrap{ height: 540px; }
+      .hero-stack-title{ font-size: 16px; }
+      .hero-stack-desc{ font-size: 12px; }
+    }
+
+    .featured {
+      background: #111;
+      color: white;
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    @media (max-width: 768px){
+      .featured{ padding: 84px 0; }
+    }
+
+    .featured::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: .55;
+      mask-image: radial-gradient(circle at 50% 20%, black 45%, transparent 82%);
+    }
+
+    .featured::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(820px 420px at 22% 28%, rgba(255,165,0,.14), transparent 60%),
+        radial-gradient(780px 420px at 78% 34%, rgba(236,72,153,.12), transparent 62%),
+        radial-gradient(860px 520px at 52% 90%, rgba(128,0,128,.14), transparent 66%);
+      opacity: .9;
+    }
+
+    .featured .container{
+      position: relative;
+      z-index: 1;
+    }
+
+    .featured-title {
+      font-size: clamp(42px, 6vw, 96px);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .featured-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 26px;
+      margin-top: 44px;
+    }
+
+    @media (max-width: 1100px){
+      .featured-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px){
+      .featured-grid{ grid-template-columns: 1fr; gap: 22px; }
+    }
+
+    .fw-card{
+      position: relative;
+      border-radius: 22px;
+      padding: 1px;
+      background: linear-gradient(135deg,
+        rgba(255,165,0,.60),
+        rgba(236,72,153,.48),
+        rgba(128,0,128,.60)
+      );
+      text-decoration:none;
+      color: inherit;
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+
+    .fw-inner{
+      border-radius: 21px;
+      background:
+        radial-gradient(1200px 520px at 14% 0%, rgba(255,165,0,.16), transparent 55%),
+        radial-gradient(1200px 520px at 86% 0%, rgba(236,72,153,.12), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .fw-card:hover .fw-inner{
+      transform: translateY(-6px);
+      box-shadow: 0 22px 65px rgba(0,0,0,.45);
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .fw-thumb{
+      position: relative;
+      height: 250px;
+      overflow:hidden;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.35);
+    }
+
+    .fw-thumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.03);
+      filter: contrast(1.12) saturate(1.15);
+      opacity: .92;
+    }
+
+    .fw-thumb::after{
+      content:"";
+      position:absolute;
+      inset:-45% -25% auto -25%;
+      height: 190px;
+      background: linear-gradient(to right, orange, hotpink, purple);
+      opacity: .22;
+      filter: blur(44px);
+      pointer-events:none;
+    }
+
+    .fw-body{ padding: 22px 22px 22px; }
+
+    .fw-label{
+      display:inline-block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      margin-bottom: 10px;
+    }
+
+    .fw-title{
+      font-size: 30px;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .fw-desc{
+      color: rgba(255,255,255,.72);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      max-width: 60ch;
+    }
+
+    .fw-cta{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 850;
+      color: rgba(255,255,255,.92);
+      padding: 8px 0 0;
+      user-select:none;
+    }
+
+    .fw-cta i{
+      width: 18px;
+      height: 18px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 6px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 12px;
+    }
+
+    @media (max-width: 520px){
+      .fw-thumb{ height: 210px; }
+      .fw-body{ padding: 18px; }
+      .fw-title{ font-size: 24px; }
+      .fw-desc{ font-size: 14px; }
+    }
+
+    .capabilities { padding: 120px 0; }
+    @media (max-width: 768px){ .capabilities{ padding: 84px 0; } }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(40px, 6vw, 96px);
+      font-weight: 900;
+      margin-bottom: 80px;
+      line-height: 1.05;
+    }
+
+    @media (max-width: 768px){
+      .section-title{ margin-bottom: 42px; }
+    }
+
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1100px) { .cap-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .cap-grid { grid-template-columns: 1fr; } }
+
+    .cap-card {
+      padding: 40px;
+      border-radius: 32px;
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      transition: all .35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 520px){
+      .cap-card{ padding: 22px; border-radius: 22px; }
+    }
+
+    .cap-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, orange, hotpink, purple);
+      opacity: 0;
+      transition: .35s;
+    }
+
+    .cap-card:hover::after { opacity: .06; }
+    .cap-card:hover { border-color: orange; transform: translateY(-8px); }
+
+    .cap-card h3 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .cap-card p {
+      font-size: 15px;
+      color: #4b5563;
+      position: relative;
+      z-index: 1;
+      line-height: 1.6;
+    }
+
+    .cap-tag{
+      display:inline-block;
+      margin-top:14px;
+      font-weight:800;
+      font-size:13px;
+      color:#111827;
+      opacity:.85;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cap-icon{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      background: rgba(17,24,39,0.04);
+      border: 1px solid rgba(17,24,39,0.08);
+      overflow: hidden;
+      color: #111827;
+    }
+
+    .cap-icon i{
+      font-size: 30px;
+      color: currentColor;
+      opacity: .95;
+    }
+
+    .cap-icon svg{
+      width: 30px;
+      height: 30px;
+      display: block;
+      color: currentColor;
+    }
+
+    .cap-icon svg *{
+      fill: currentColor;
+      stroke: currentColor;
+    }
+
+    .cap-icon img{
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) saturate(100%);
+      opacity: .95;
+    }
+
+    .cap-icon.cap-icon-ghl{
+      font-weight: 1000;
+      letter-spacing: .08em;
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .cap-icon.cap-icon-ghl span{
+      display:inline-block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(17,24,39,0.06);
+      border: 1px solid rgba(17,24,39,0.10);
+      font-weight: 1000;
+    }
+
+    .experience {
+      padding: 6rem 1.5rem;
+      background: #111;
+      color: #f9fafb;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    @media (max-width: 768px){
+      .experience{ padding: 4.5rem 1rem; }
+    }
+
+    .experience::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("assets/hero-web-design-modern.jpg") center/cover no-repeat;
+      opacity: 0.35;
+      z-index: 0;
+      pointer-events:none;
+      transform: scale(1.05);
+      filter: contrast(1.1) saturate(1.05);
+    }
+
+    .experience::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.85));
+      z-index: 0;
+      pointer-events:none;
+    }
+
+    .experience .container{
+      position: relative;
+      z-index: 1;
+    }
+
+    .experience-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .experience-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: monospace;
+      text-transform: capitalize;
+    }
+
+    .experience-timeline {
+      position: relative;
+      padding-left: 4rem;
+    }
+
+    @media (max-width: 640px){
+      .experience-timeline{ padding-left: 2.4rem; }
+      .timeline-line{ left: 1.1rem; }
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 2rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #f97316, #ec4899, purple);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 2rem;
+    }
+
+    @media (max-width: 640px){
+      .timeline-item{ padding-left: 1.2rem; }
+      .timeline-dot{ left: -0.7rem; }
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1rem;
+      top: 0.25rem;
+      width: 1rem;
+      height: 1rem;
+      background: #111;
+      border: 2px solid #22d3ee;
+      border-radius: 50%;
+    }
+
+    .timeline-content {
+      background: #1f2937;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid #374151;
+    }
+
+    @media (max-width: 520px){
+      .timeline-content{ padding: 1.1rem; }
+    }
+
+    .timeline-period {
+      display: block;
+      color: #22d3ee;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+
+    .timeline-role {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0.25rem 0;
+    }
+
+    .timeline-company {
+      font-size: 0.875rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.875rem;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .cta {
+      background: #0b0b0b;
+      color: white;
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    @media (max-width: 768px){
+      .cta{ padding: 84px 0; }
+    }
+
+    .cta::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(760px 420px at 20% 28%, rgba(255,165,0,.18), transparent 60%),
+        radial-gradient(760px 420px at 80% 36%, rgba(236,72,153,.16), transparent 62%),
+        radial-gradient(860px 520px at 52% 90%, rgba(128,0,128,.18), transparent 66%);
+      opacity: .95;
+      z-index: 0;
+    }
+
+    .cta .container{
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
+    }
+
+    .cta .contact-head{
+      text-align:center;
+      margin-bottom: 34px;
+    }
+
+    .cta .contact-head h2{
+      font-size: clamp(40px, 6vw, 96px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .cta .contact-head p{
+      font-size: 18px;
+      max-width: 720px;
+      margin: 0 auto;
+      opacity: .85;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px){
+      .cta .contact-head p{ font-size: 15px; }
+    }
+
+    .cta .contact-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 26px;
+      align-items: start;
+      margin-top: 34px;
+      text-align: left;
+    }
+
+    @media (max-width: 980px){
+      .cta .contact-grid{ grid-template-columns: 1fr; }
+    }
+
+    .cta .contact-left h3{
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    @media (max-width: 520px){
+      .cta .contact-left h3{ font-size: 24px; }
+    }
+
+    .cta .contact-left p{
+      color: rgba(255,255,255,.78);
+      line-height: 1.65;
+      max-width: 60ch;
+      margin-bottom: 22px;
+    }
+
+    .cta .contact-items{
+      display:flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .cta .contact-item{
+      display:flex;
+      gap: 14px;
+      align-items:flex-start;
+      min-width: 0;
+    }
+
+    .cta .contact-icon{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+      position: relative;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+
+    .cta .contact-icon::after{
+      content:"";
+      position:absolute;
+      inset:-30px;
+      background: linear-gradient(135deg, orange, hotpink, purple);
+      opacity: .24;
+      filter: blur(18px);
+    }
+
+    .cta .contact-icon i{ position: relative; z-index: 1; }
+
+    .cta .contact-item strong{
+      display:block;
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .cta .contact-item span{
+      display:block;
+      color: rgba(255,255,255,.72);
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .cta .contact-item a{
+      color: rgba(255,255,255,.90);
+      text-decoration: none;
+    }
+
+    .cta .contact-item a:hover{
+      text-decoration: underline;
+    }
+
+    .cta .form-card{
+      border-radius: 22px;
+      padding: 22px;
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(255,165,0,.14), transparent 60%),
+        radial-gradient(900px 420px at 82% 0%, rgba(236,72,153,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 60px rgba(0,0,0,.32);
+      width: 100%;
+      max-width: 520px;
+      justify-self: end;
+    }
+
+    @media (max-width: 980px){
+      .cta .form-card{ max-width: 100%; justify-self: stretch; }
+    }
+
+    .cta .form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 520px){ .cta .form-grid{ grid-template-columns: 1fr; } }
+
+    .cta label{
+      display:block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      margin: 6px 0 8px;
+    }
+
+    .cta .field{
+      width: 100%;
+      border-radius: 14px;
+      padding: 14px 14px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #fff;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .cta .field::placeholder{ color: rgba(255,255,255,.45); }
+
+    .cta .field:focus{
+      border-color: rgba(255,165,0,.55);
+      box-shadow: 0 0 0 4px rgba(255,165,0,.12);
+    }
+
+    .cta textarea.field{
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .cta .send-btn{
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      background: linear-gradient(135deg, orange, hotpink, purple);
+      color: #fff;
+      transition: transform .2s ease, box-shadow .2s ease;
+      margin-top: 12px;
+    }
+
+    .cta .send-btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    footer {
+      background: #111;
+      color: white;
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    @media (max-width: 520px){
+      .footer-inner{ justify-content: center; text-align:center; }
+    }
+
+    .footer-logo img {
+      height: 90px;
+      width: auto;
+      display: block;
+      max-width: 100%;
+    }
+
+    .footer-socials { display: flex; gap: 20px; }
+
+    .footer-socials a {
+      color: #9ca3af;
+      font-size: 22px;
+      transition: color .3s ease, transform .3s ease;
+    }
+
+    .footer-socials a:hover {
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 380px){
+      .header-cta{ padding: 9px 12px; font-size: 13px; }
+      .header-logo img{ height: 36px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+
+      <nav class="header-nav">
+        <a href="home.html#home">Home</a>
+
+        <div class="nav-dropdown">
+          <a class="nav-parent" href="#works" aria-haspopup="true" aria-expanded="false">
+            My Works <i class="fa-solid fa-chevron-down"></i>
+          </a>
+
+          <div class="nav-menu" role="menu" aria-label="My Works">
+            <a role="menuitem" href="website.html">Websites</a>
+            <a role="menuitem" href="funnels.html">Funnels</a>
+            <a role="menuitem" href="ai-builds.html">AI Builds</a>
+            <a role="menuitem" href="ai-automation.html">Automations</a>
+          </div>
+        </div>
+
+        <a href="home.html#build">Core Skills</a>
+        <a href="home.html#experience">Experience</a>
+      </nav>
+
+      <a class="header-cta" href="#collab">Collaborate ↗</a>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <img src="assets/back2.png" alt="Hero Background">
+    </div>
+
+    <div class="hero-overlay"></div>
+    <div class="blur-bg blur-orange"></div>
+    <div class="blur-bg blur-purple"></div>
+
+    <div class="container hero-grid">
+      <div>
+        <h1>
+          I CRAFT<br>
+          <span class="gradient-text">MODERN</span><br>
+          WEBSITES
+        </h1>
+
+        <p>Freelance creative developer crafting digital experiences that make brands unforgettable.</p>
+
+        <div class="hero-buttons">
+          <a class="btn btn-dark" href="#works" style="display:inline-block;text-decoration:none;">See My Work ↗</a>
+          <a class="btn btn-outline hero-outline" href="#collab" style="display:inline-block;text-decoration:none;">Let's Talk</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-stack-intro">
+          <span class="hero-stack-kicker">Website Samples</span>
+
+        </div>
+
+        <div class="hero-stack-wrap">
+          <div class="hero-stack-scene" id="heroStackWrap" aria-label="Website sample carousel"></div>
+        </div>
+
+        <div class="hero-stack-hint">Click the front card to rotate the stack</div>
+      </div>
+    </div>
+  </section>
+
+<section class="featured" id="works">
+  <div class="container">
+    <h2 class="featured-title">FEATURED</h2>
+    <h2 class="featured-title gradient-text">WORK</h2>
+
+    <div class="featured-grid">
+      <a class="fw-card" href="website.html" style="display:block;">
+        <div class="fw-inner">
+          <div class="fw-thumb">
+            <img src="assets/web dev.png" alt="Web Development background">
+          </div>
+          <div class="fw-body">
+            <div class="fw-label">Web Development</div>
+            <div class="fw-title">Websites That Turn Visitors Into Clients</div>
+            <div class="fw-desc">High-performing websites designed to look premium, load fast, and convert.</div>
+            <div class="fw-cta">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+      </a>
+
+      <a class="fw-card" href="funnels.html" style="display:block;">
+        <div class="fw-inner">
+          <div class="fw-thumb">
+            <img src="assets/funnel.png" alt="Sales Funnels background">
+          </div>
+          <div class="fw-body">
+            <div class="fw-label">Sales Funnels</div>
+            <div class="fw-title">Funnels Engineered for Conversions</div>
+            <div class="fw-desc">Landing pages + flows built to increase leads, bookings, and sales.</div>
+            <div class="fw-cta">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+      </a>
+
+      <a class="fw-card" href="ai-builds.html" style="display:block;">
+        <div class="fw-inner">
+          <div class="fw-thumb">
+            <img src="assets/ai.png" alt="AI Builds background">
+          </div>
+          <div class="fw-body">
+            <div class="fw-label">AI-Powered Builds</div>
+            <div class="fw-title">AI-Generated Websites, Refined by Experts</div>
+            <div class="fw-desc">Fast AI builds polished with real UX + conversion improvements.</div>
+            <div class="fw-cta">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+      </a>
+
+      <a class="fw-card" href="ai-automation.html" style="display:block;">
+        <div class="fw-inner">
+          <div class="fw-thumb">
+            <img src="assets/automation.png" alt="AI Automation background">
+          </div>
+          <div class="fw-body">
+            <div class="fw-label">AI Automation</div>
+            <div class="fw-title">Workflows That Work While You Sleep</div>
+            <div class="fw-desc">Smart automations built on n8n, Zapier, and Make that connect your tools and eliminate repetitive tasks.</div>
+            <div class="fw-cta">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+  <section class="capabilities" id="build">
+    <div class="container">
+      <h2 class="section-title">CORE SKILLS & TECHNOLOGIES</h2>
+
+      <div class="cap-grid">
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-html5"></i></div>
+          <h3>HTML</h3>
+          <p>Semantic structure and clean layouts that load fast and rank well.</p>
+          <span class="cap-tag">Sections • Forms • Accessibility</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-css3-alt"></i></div>
+          <h3>CSS</h3>
+          <p>Responsive styling and polished UI that looks premium on any device.</p>
+          <span class="cap-tag">Responsive • Animations • Layout</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-js"></i></div>
+          <h3>JavaScript</h3>
+          <p>Interactive experiences that feel smooth, modern, and conversion-focused.</p>
+          <span class="cap-tag">UX • Interactions • Logic</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-python"></i></div>
+          <h3>Python</h3>
+          <p>Automation and scripting to streamline tasks and support integrations.</p>
+          <span class="cap-tag">Automation • Data • Utilities</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-java"></i></div>
+          <h3>Java</h3>
+          <p>Reliable backend-ready foundations for systems and scalable logic.</p>
+          <span class="cap-tag">OOP • APIs • Structure</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon" aria-label="MongoDB">
+            <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
+              <path d="M32 6c7 9 10 16 10 24 0 13-6 23-10 28-4-5-10-15-10-28 0-8 3-15 10-24z"/>
+              <path d="M31 18c1 10 1 22 1 36" fill="none" stroke-width="4" stroke-linecap="round"/>
+              <path d="M27 56c3 2 7 2 10 0 0 0-1 4-5 4s-5-4-5-4z"/>
+            </svg>
+          </div>
+          <h3>MongoDB</h3>
+          <p>Flexible NoSQL database structure for modern apps and fast iteration.</p>
+          <span class="cap-tag">NoSQL • Collections • Queries</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-solid fa-database"></i></div>
+          <h3>MySQL</h3>
+          <p>Structured relational databases designed for clarity and performance.</p>
+          <span class="cap-tag">Schema • Tables • Joins</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon cap-icon-ghl"><span>GHL</span></div>
+          <h3>GoHighLevel</h3>
+          <p>Done-for-you builds inside GHL that are made to convert and scale.</p>
+          <span class="cap-tag">Automations • Funnels • Websites</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon" aria-label="Packet Tracer">
+            <img src="assets/pkt.png" alt="Packet Tracer Logo">
+          </div>
+          <h3>Packet Tracer</h3>
+          <p>Network simulation and lab builds for routing, switching, and troubleshooting.</p>
+          <span class="cap-tag">Topology • VLAN • Simulation</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon"><i class="fa-brands fa-figma"></i></div>
+          <h3>Figma</h3>
+          <p>Design-to-build execution with clean layouts, spacing, and component thinking.</p>
+          <span class="cap-tag">UI • Wireframes • Prototypes</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon" aria-label="Canva">
+            <img src="assets/canva.png" alt="Canva Logo">
+          </div>
+          <h3>Canva</h3>
+          <p>Quick branded assets for websites, social, and marketing deliverables.</p>
+          <span class="cap-tag">Branding • Graphics • Content</span>
+        </div>
+
+        <div class="cap-card">
+          <div class="cap-icon" aria-label="dart">
+            <img src="assets/dart.png" alt="Dart Logo">
+          </div>
+          <h3>Dart.dev</h3>
+          <p>Modern, strongly-typed language used for Flutter—ideal for building fast, clean, and scalable cross-platform apps.</p>
+          <span class="cap-tag">Flutter • UI Logic • Performance</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="experience" id="experience">
+  <div class="container">
+    <div class="experience-header">
+      <h2>Experience</h2>
+    </div>
+    <div class="experience-timeline">
+      <div class="timeline-line"></div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-period">February 2025 – May 2026</span>
+          <h3 class="timeline-role">AI Automation, Funnel and Website Specialist</h3>
+          <p class="timeline-company">@ Resin Reach</p>
+          <p class="timeline-desc">
+            Built and deployed AI-powered automation systems using Vapi, ElevenLabs, Make, Zapier, N8N, and Supabase—designing AI agents, automated chatbots, and voice AI workflows that streamlined operations and eliminated manual tasks. Also managed sales funnel strategy and website development to drive lead generation and conversions.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-period">November 2023 – March 2024</span>
+          <h3 class="timeline-role">Web Developer</h3>
+          <p class="timeline-company">@ webdesignbunny</p>
+          <p class="timeline-desc">
+            Created no-code websites using Lovable and Bolt, delivering responsive, user-friendly sites without coding—focused on layout design, functionality, and client requirements to ship polished websites efficiently.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item" style="margin-bottom:0;">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <span class="timeline-period">March 2022 – August 2023</span>
+          <h3 class="timeline-role">Amazon Product Researcher</h3>
+          <p class="timeline-company">@ Bentlehams Holdings</p>
+          <p class="timeline-desc">
+            Consistently delivered quality leads daily with pay based on approved deals—became highly skilled at reading Keepa charts, spotting sales trends, and evaluating buy box, BSR, and variations to make strong sourcing decisions.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <section class="certifications" id="certifications">
+    <div class="container">
+      <h2 class="section-title">CERTIFICATIONS</h2>
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/english-for-it-1.png" alt="english-for-it-1">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="9b3ffaaa-6f0b-4e79-82dc-f3e19f18a7da" data-share-badge-host="https://www.credly.com/badges/c1f74003-09ea-40c2-9976-235929416f01/public_url"></div>
+          <div class="cert-title">English for IT 1</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/cyber-threat-management.png" alt="cyber-threat-management">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="67533801-8372-4f93-9e89-8e20b52ec3ff" data-share-badge-host="https://www.credly.com/badges/ba3dd252-b6b3-4ac6-a5c6-f58051b63346/public_url"></div>
+          <div class="cert-title">Cyber Threat Management</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/ccna-switching-routing-and-wireless-essentials.1.png" alt="ccna-switching-routing-and-wireless-essentials">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="ba3dd252-b6b3-4ac6-a5c6-f58051b63346" data-share-badge-host="https://www.credly.com/badges/67533801-8372-4f93-9e89-8e20b52ec3ff/public_url"></div>
+          <div class="cert-title">CCNA: Switching, Routing, and Wireless Essentials</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/aws-academy-graduate-cloud-foundations-training-bad.png" alt="aws-academy-graduate-cloud-foundations-training-bad">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="c1f74003-09ea-40c2-9976-235929416f01" data-share-badge-host="https://www.credly.com/badges/9b3ffaaa-6f0b-4e79-82dc-f3e19f18a7da/public_url"></div>
+          <div class="cert-title">AWS Academy Graduate - Cloud Foundations - Training Badge</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/blockchain.png" alt="blockchain">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-host="https://simpli-web.app.link/e/TfXvGK06R0b"></div>
+          <div class="cert-title">Blockchain Developer Training Certification</div>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-image">
+            <img src="assets/cloud.png" alt="cloud">
+          </div>
+          <div data-iframe-width="150" data-iframe-height="270" data-share-badge-host="https://simpli-web.app.link/e/JCCv6vt7R0b"></div>
+          <div class="cert-title">Introduction to Cloud Computing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script async src="//cdn.credly.com/assets/utilities/embed.js"></script>
+
+  <section class="cta" id="collab">
+    <div class="container">
+      <div class="contact-head">
+        <h2>Get in <span class="gradient-text">Touch</span></h2>
+        <p>
+          Tell me what you’re building and I’ll reply with a clear next step (timeline + setup + cost estimate).
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-left">
+          <h3>Let’s Talk About Your Project</h3>
+          <p>
+            Tell me what you’re building and I’ll reply with a clear next step (timeline + setup + cost estimate).
+          </p>
+
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
+              <div>
+                <strong>Email Me</strong>
+                <span><a href="mailto:errolgalejandro@gmail.com">errolgalejandro@gmail.com</a></span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-calendar"></i></div>
+              <div>
+                <strong>WhatsApp</strong>
+                <span>+63 969-503-1173</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-brands fa-linkedin-in"></i></div>
+              <div>
+                <strong>Connect</strong>
+                <span>
+                  <a href="#" aria-label="LinkedIn">LinkedIn</a> •
+                  <a href="#" aria-label="Upwork">Onlinejobs.ph</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="form-card">
+          <div class="form-grid">
+            <div>
+              <label>First Name</label>
+              <input class="field" type="text" placeholder="John" />
+            </div>
+            <div>
+              <label>Last Name</label>
+              <input class="field" type="text" placeholder="Doe" />
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label>Email Address</label>
+            <input class="field" type="email" placeholder="john@example.com" />
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label>Phone Number</label>
+            <input class="field" type="tel" placeholder="(555) 000-0000" />
+          </div>
+
+          <div>
+            <label>Project Details</label>
+            <textarea class="field" placeholder="Tell us about your project..."></textarea>
+          </div>
+
+          <button class="send-btn" type="button">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+      <div class="footer-socials">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+      <p style="color:#9ca3af;">© 2024 All rights reserved</p>
+    </div>
+  </footer>
+
+  <script>
+    const dd = document.querySelector(".nav-dropdown");
+    const trigger = document.querySelector(".nav-parent");
+    const menu = document.querySelector(".nav-menu");
+
+    if (dd && trigger && menu) {
+      trigger.addEventListener("click", (e) => {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        if (isTouch) {
+          e.preventDefault();
+          dd.classList.toggle("open");
+          trigger.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dd.contains(e.target)) {
+          dd.classList.remove("open");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    const stackProjects = [
+      {
+        url: "https://app.gohighlevel.com/v2/preview/LmCvkBYAJosYsREjBkIa",
+        title: "Resin Reach",
+        desc: "Dominate your local epoxy flooring market — AI Epoxy Growth Infrastructure that delivers 10–20 booked projects/month.",
+        tags: ["Epoxy Marketing", "Lead Gen System", "10–20 Projects/mo"],
+        thumb: "website/resin.png",
+        domain: "app.gohighlevel.com"
+      },
+      {
+        url: "https://rosiecuellar.com/home-880300",
+        title: "Rosie Cuellar Campaign",
+        desc: "Campaign website with donation CTA, credibility stats, and clean hero layout.",
+        tags: ["Campaign", "Donation CTA", "Lead capture"],
+        thumb: "website/rosie.png",
+        domain: "rosiecuellar.com"
+      },
+      {
+        url: "https://jerryforwebb.com/home-v1-7657",
+        title: "Jerry Garza Campaign",
+        desc: "Election campaign landing with strong headline, CTA buttons, and donation flow.",
+        tags: ["Campaign", "Hero CTA", "Donations"],
+        thumb: "website/jerry.png",
+        domain: "jerryforwebb.com"
+      },
+      {
+        url: "https://baldoforoffice.com/home",
+        title: "Baldo Granados Campaign",
+        desc: "City Council campaign site with bold messaging, supporter CTA, and clean sections.",
+        tags: ["Campaign", "Support CTA", "Branding"],
+        thumb: "website/baldo.png",
+        domain: "baldoforoffice.com"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/20zNkanCT8lg58diJyzV",
+        title: "Richard Pena Raymond Campaign",
+        desc: "State Representative campaign page with strong visual identity + donation CTA.",
+        tags: ["GHL", "Campaign", "Donate"],
+        thumb: "website/richard.png",
+        domain: "app.gohighlevel.com"
+      },
+      {
+        url: "https://jarochostaqueria.com/home",
+        title: "Jarochos Taqueria",
+        desc: "Restaurant website with hero slider, menu navigation, and strong food imagery.",
+        tags: ["Restaurant", "Menu", "Local SEO"],
+        thumb: "website/jarochos.png",
+        domain: "jarochostaqueria.com"
+      },
+      {
+        url: "https://aymariarestaurant.us/home",
+        title: "Ay Maria Restaurant",
+        desc: "Mexican restaurant site with strong hero, reservation CTA, and brand story section.",
+        tags: ["Restaurant", "Reservations", "DoorDash"],
+        thumb: "website/maria.png",
+        domain: "aymariarestaurant.us"
+      },
+      {
+        url: "https://agavejalisco.com/home-168489",
+        title: "Agave Jalisco",
+        desc: "Restaurant site with book-a-table CTA, menu access, and bold hero image section.",
+        tags: ["Restaurant", "Book a table", "Menu"],
+        thumb: "website/agave.png",
+        domain: "agavejalisco.com"
+      },
+      {
+        url: "https://helenmariehomes.com/home",
+        title: "Helen Marie Homes",
+        desc: "Home builder site featuring premium hero imagery, search CTA, and clean navigation.",
+        tags: ["Real Estate", "Home Builder", "Inventory"],
+        thumb: "website/helen.png",
+        domain: "helenmariehomes.com"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/2E2ZwE68fJRdtHRGLT3L",
+        title: "MP Asset Management",
+        desc: "Property/asset management landing with consultation CTA and service tiles.",
+        tags: ["GHL", "Property", "Consultation"],
+        thumb: "website/mp.png",
+        domain: "app.gohighlevel.com"
+      },
+      {
+        url: "https://escalerataxiservice.com/home",
+        title: "Escalera Taxi Service",
+        desc: "Taxi service site with strong headline, call CTA, and service-focused layout.",
+        tags: ["Service Business", "Local", "Call CTA"],
+        thumb: "website/escaleras.png",
+        domain: "escalerataxiservice.com"
+      },
+      {
+        url: "https://efficientsoccer.com/home-664293",
+        title: "Efficient Soccer",
+        desc: "Sports training site with bold hero, program CTA buttons, and modern layout.",
+        tags: ["Sports", "Programs", "Lead capture"],
+        thumb: "website/efficient.png",
+        domain: "efficientsoccer.com"
+      },
+      {
+        url: "https://centroecuestrelaredo.com/home",
+        title: "Centro Ecuestre Laredo",
+        desc: "Equestrian site with strong branding, hero video/image, and camp CTA button.",
+        tags: ["Local Business", "Bookings", "Events"],
+        thumb: "website/centro.png",
+        domain: "centroecuestrelaredo.com"
+      },
+      {
+        url: "https://angeltrevinoarchitecture.com/",
+        title: "Angel Trevino Architecture",
+        desc: "Architecture firm landing page with strong hero section + discovery CTA.",
+        tags: ["Architecture", "Services", "Lead CTA"],
+        thumb: "website/angel.png",
+        domain: "angeltrevinoarchitecture.com"
+      },
+      {
+        url: "https://performanceepoxyflooring.com/home-page",
+        title: "Performance Epoxy Flooring",
+        desc: "Epoxy flooring site with quote CTA, promo form, and service-focused layout.",
+        tags: ["Epoxy", "Home Services", "Lead form"],
+        thumb: "website/performance.png",
+        domain: "performanceepoxyflooring.com"
+      },
+      {
+        url: "https://fusionforceconcretesystems.com/home-page-545469",
+        title: "Fusion Force Concrete Systems",
+        desc: "Concrete coating brand page with CTA buttons and strong hero background.",
+        tags: ["Concrete Coatings", "Quote CTA", "Local"],
+        thumb: "website/fusion.png",
+        domain: "fusionforceconcretesystems.com"
+      },
+      {
+        url: "https://downsouthconcretecoatingsllc.com/homepage",
+        title: "Down South Concrete Coatings",
+        desc: "Floor coating site with CTA button, phone CTA, and clear offer placement.",
+        tags: ["Epoxy", "Phone CTA", "Lead capture"],
+        thumb: "website/down.png",
+        domain: "downsouthconcretecoatingsllc.com"
+      },
+      {
+        url: "https://built-strong.net/home",
+        title: "Built Strong (BST Contracting)",
+        desc: "Contracting + epoxy site with bold messaging, offer CTA, and conversion form.",
+        tags: ["Contracting", "Epoxy", "Lead form"],
+        thumb: "website/bst.png",
+        domain: "built-strong.net"
+      },
+      {
+        url: "https://atexservicestx.com/home-818298",
+        title: "ATEX Services",
+        desc: "Services site with bold hero messaging, trust elements, and strong CTA layout.",
+        tags: ["Construction", "Telecom", "Services"],
+        thumb: "website/atexv1.png",
+        domain: "atexservicestx.com"
+      },
+      {
+        url: "https://atexrentalstx.com/home",
+        title: "ATEX Rentals",
+        desc: "Equipment rental landing with strong hero + clear CTA and equipment positioning.",
+        tags: ["Rentals", "Construction", "Inquiry CTA"],
+        thumb: "website/atexv2.png",
+        domain: "atexrentalstx.com"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/hReJrjTle05EoTnQbMYR",
+        title: "Refit Home Improvement",
+        desc: "Modern landing page with minimal design, trust messaging, and strong CTA.",
+        tags: ["GHL", "Home Improvement", "Lead CTA"],
+        thumb: "website/marcela.png",
+        domain: "app.gohighlevel.com"
+      }
+    ];
+
+    const stackWrap = document.getElementById("heroStackWrap");
+    let cardOrder = stackProjects.map((_, index) => index);
+    let isAnimating = false;
+    const cardElements = new Map();
+
+    function createStackCard(project, index) {
+      const card = document.createElement("article");
+      card.className = "hero-stack-card";
+      card.dataset.index = index;
+
+      const tagsHtml = (project.tags || []).slice(0, 3).map(tag => `
+        <span class="hero-stack-pill"><i class="fa-solid fa-tag"></i>${tag}</span>
+      `).join("");
+
+      card.innerHTML = `
+        <div class="hero-stack-inner">
+          <div class="hero-browser">
+            <div class="hero-browser-top">
+              <div class="hero-browser-dots"><span></span><span></span><span></span></div>
+              <div class="hero-browser-address">${project.domain}</div>
+            </div>
+
+            <div class="hero-browser-shot">
+              <img src="${project.thumb}" alt="Preview of ${project.title}" loading="lazy">
+            </div>
+          </div>
+
+          <div class="hero-stack-body">
+            <div class="hero-stack-topline">
+              <div class="hero-stack-label">Website Sample</div>
+              <div class="hero-stack-status">In Deck</div>
+            </div>
+
+            <div class="hero-stack-title">${project.title}</div>
+            <div class="hero-stack-desc">${project.desc}</div>
+
+            <div class="hero-stack-tags">${tagsHtml}</div>
+
+            <div class="hero-stack-actions">
+              <a class="hero-stack-link" href="${project.url}" target="_blank" rel="noopener">
+                Open Live Site <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+              <span class="hero-stack-note">Click card to rotate</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const liveLink = card.querySelector(".hero-stack-link");
+      liveLink.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+
+      card.addEventListener("click", () => {
+        const currentPos = Number(card.dataset.position || 99);
+        if (currentPos === 0) rotateStack();
+      });
+
+      return card;
+    }
+
+    function buildStack() {
+      stackProjects.forEach((project, index) => {
+        const card = createStackCard(project, index);
+        cardElements.set(index, card);
+        stackWrap.appendChild(card);
+      });
+    }
+
+    function getStackLayout(position) {
+      const compact = window.innerWidth <= 640;
+      const xStep = compact ? 10 : 18;
+      const yStep = compact ? 22 : 34;
+      const zStep = compact ? 72 : 110;
+      const rotStep = compact ? 2.5 : 4;
+      const scaleStep = compact ? 0.045 : 0.04;
+
+      return {
+        x: xStep * position,
+        y: yStep * position,
+        z: zStep * position * -1,
+        rot: rotStep * position,
+        scale: 1 - (scaleStep * position),
+        opacity: position > 3 ? 0 : 1 - (position * 0.08)
+      };
+    }
+
+    function applyLayout() {
+      cardOrder.forEach((projectIndex, position) => {
+        const card = cardElements.get(projectIndex);
+        const layout = getStackLayout(position);
+
+        card.dataset.position = position;
+        card.style.setProperty("--tx", `${layout.x}px`);
+        card.style.setProperty("--ty", `${layout.y}px`);
+        card.style.setProperty("--tz", `${layout.z}px`);
+        card.style.setProperty("--rz", `${layout.rot}deg`);
+        card.style.setProperty("--scale", layout.scale);
+        card.style.opacity = layout.opacity;
+        card.style.zIndex = String(100 - position);
+        card.style.filter = position === 0 ? "none" : "saturate(0.82) brightness(0.92)";
+        card.style.pointerEvents = position === 0 ? "auto" : "none";
+        card.classList.toggle("is-front", position === 0);
+
+        const status = card.querySelector(".hero-stack-status");
+        if (status) status.textContent = position === 0 ? "Now Showing" : "In Deck";
+      });
+    }
+
+    function rotateStack() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const outgoingIndex = cardOrder[0];
+      const incomingIndex = cardOrder[1];
+      const outgoing = cardElements.get(outgoingIndex);
+      const incoming = cardElements.get(incomingIndex);
+
+      if (!outgoing || !incoming) {
+        isAnimating = false;
+        return;
+      }
+
+      outgoing.classList.add("is-outgoing");
+      incoming.classList.add("is-incoming");
+      outgoing.style.zIndex = "999";
+
+      const compact = window.innerWidth <= 640;
+      outgoing.style.setProperty("--tx", `${compact ? 18 : 28}px`);
+      outgoing.style.setProperty("--ty", `${compact ? 84 : 118}px`);
+      outgoing.style.setProperty("--tz", `${compact ? -260 : -360}px`);
+      outgoing.style.setProperty("--rz", `${compact ? 10 : 13}deg`);
+      outgoing.style.setProperty("--scale", compact ? "0.84" : "0.8");
+      outgoing.style.filter = "saturate(0.72) brightness(0.82)";
+      outgoing.style.opacity = "0.72";
+
+      window.setTimeout(() => {
+        cardOrder.push(cardOrder.shift());
+        applyLayout();
+      }, 120);
+
+      window.setTimeout(() => {
+        outgoing.classList.remove("is-outgoing");
+        incoming.classList.remove("is-incoming");
+        isAnimating = false;
+      }, 820);
+    }
+
+    buildStack();
+    applyLayout();
+    window.addEventListener("resize", applyLayout);
+  </script>
+</body>
+</html>

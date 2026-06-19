@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>Web Development | Portfolio</title>
+
+  <style>
+    *{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif; }
+
+    /* ===== YOUR PALETTE ===== */
+    :root{
+      --bg: #0b0b0b;
+      --text: #ffffff;
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.58);
+
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.045);
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.16);
+
+      --g1: orange;
+      --g2: hotpink;
+      --g3: purple;
+      --grad: linear-gradient(135deg, var(--g1), var(--g2), var(--g3));
+    }
+
+    /* ===== Background (not plain) ===== */
+    body{
+      background: var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      position: relative;
+      isolation: isolate;
+    }
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: .22;
+      mask-image: radial-gradient(circle at 50% 18%, black 55%, transparent 85%);
+    }
+    body::after{
+      content:"";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 18% 10%, rgba(255,165,0,.18), transparent 60%),
+        radial-gradient(860px 520px at 82% 18%, rgba(236,72,153,.14), transparent 62%),
+        radial-gradient(980px 560px at 52% 95%, rgba(128,0,128,.16), transparent 66%),
+        radial-gradient(1200px 700px at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,.78));
+      opacity: 1;
+    }
+
+    /* Utility */
+    .container{ max-width:1200px; margin:auto; padding: 0 24px; }
+    section{ scroll-margin-top: 140px; }
+
+    /* ================= HEADER (SAME AS MAIN: DROPDOWN + MOBILE TAP) ================= */
+    .header {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .header-logo img {
+      height: 50px;
+      width: auto;
+      display: block;
+    }
+
+    .header-nav { display: flex; gap: 24px; align-items:center; }
+
+    .header-nav a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #111827;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .header-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: var(--grad);
+      transition: width .3s ease;
+    }
+    .header-nav a:hover::after { width: 100%; }
+
+    .header-cta {
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      background: var(--grad);
+      color: white;
+      transition: transform .25s ease, box-shadow .25s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Dropdown */
+    .nav-dropdown{
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .nav-parent{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #111827;
+      font-size: 15px;
+      position: relative;
+      cursor: pointer;
+      padding: 2px 0;
+    }
+    .nav-parent::after{
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: var(--grad);
+      transition: width .3s ease;
+    }
+    .nav-dropdown:hover .nav-parent::after{ width: 100%; }
+
+    .nav-parent i{
+      font-size: 12px;
+      opacity: .75;
+      transform: translateY(1px);
+    }
+
+    .nav-menu{
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 0;
+      min-width: 220px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(17,24,39,0.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+      display: none;
+      z-index: 2000;
+    }
+
+    .nav-dropdown:hover .nav-menu{ display: block; }
+
+    .nav-menu a{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: #111827;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .nav-menu a:hover{
+      background: rgba(17,24,39,0.06);
+    }
+
+    .nav-menu::before{
+      content:"";
+      position:absolute;
+      top: -8px;
+      left: 18px;
+      width: 14px;
+      height: 14px;
+      background: rgba(255,255,255,0.92);
+      transform: rotate(45deg);
+      border-left: 1px solid rgba(17,24,39,0.08);
+      border-top: 1px solid rgba(17,24,39,0.08);
+    }
+
+    .nav-dropdown::after{
+      content:"";
+      position:absolute;
+      left: 0;
+      top: 100%;
+      width: 240px;
+      height: 18px;
+    }
+
+    .nav-dropdown.open .nav-menu{ display:block; }
+
+/* ✅ Mobile: show nav, hide Collaborate button */
+@media (max-width: 768px) {
+  /* hide CTA button */
+  .header-cta { display: none !important; }
+
+  /* show nav on mobile */
+  .header-nav { 
+    display: flex !important;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;            /* allow wrapping if needed */
+  }
+
+  /* keep header layout stable without CTA */
+  .header { top: 16px; left: 12px; right: 12px; transform: none; }
+  .header-inner { 
+    width: 100%;
+    gap: 12px;
+    padding: 10px 12px;
+    justify-content: flex-start; /* logo + nav */
+  }
+
+  /* make links slightly smaller so they fit */
+  .header-nav a,
+  .nav-parent { font-size: 14px; }
+
+  /* dropdown: keep inside viewport on small screens */
+  .nav-menu { 
+    left: 0;
+    right: auto;
+    max-width: calc(100vw - 48px);
+  }
+}
+
+/* ✅ Extra small phones: tighter spacing */
+@media (max-width: 420px) {
+  .header-nav { gap: 10px; }
+  .header-nav a,
+  .nav-parent { font-size: 13px; }
+}
+
+    /* ================= PAGE HERO ================= */
+    .hero{
+      padding: 140px 0 22px; /* leave space for fixed header */
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* ✅ Background placeholder image layer (like your previous code) */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("website/back.png") center/cover no-repeat; /* <-- change path */
+      opacity: .55;
+      transform: scale(1.03);
+      filter: contrast(1.08) saturate(1.1);
+      z-index:0;
+      pointer-events:none;
+    }
+
+    /* ✅ Dark overlay layer for readability */
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(to bottom right, rgba(0,0,0,.70), rgba(0,0,0,.88));
+      z-index:0;
+      pointer-events:none;
+    }
+
+    .hero .container{ position:relative; z-index:1; }
+
+    h1{
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 12px;
+    }
+    .gradient-text{
+      background: var(--grad);
+    }
+    .sub{
+      color: rgba(255,255,255,.78);
+      max-width: 760px;
+      line-height: 1.6;
+      font-size: 16px;
+      margin-bottom: 22px;
+    }
+
+    /* ================= FEATURED WORK (3 COLUMNS) ================= */
+    .featured-wrap{ padding: 8px 0 70px; }
+
+    .featured-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr)); /* ✅ 3 columns */
+      gap: 18px;
+    }
+    @media (max-width: 1100px){ .featured-grid{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 740px){ .featured-grid{ grid-template-columns: 1fr; } }
+
+    .work-card{
+      position: relative;
+      border-radius: 18px;
+      padding: 1px;
+      background: linear-gradient(135deg,
+        rgba(255,165,0,.55),
+        rgba(236,72,153,.45),
+        rgba(128,0,128,.55)
+      );
+      text-decoration:none;
+      color: inherit;
+      overflow:hidden;
+      transform: translateZ(0);
+    }
+
+    .work-inner{
+      border-radius: 17px;
+      background:
+        radial-gradient(1200px 520px at 14% 0%, rgba(255,165,0,.18), transparent 55%),
+        radial-gradient(1200px 520px at 86% 0%, rgba(236,72,153,.14), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.035));
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .work-card:hover .work-inner{
+      transform: translateY(-6px);
+      box-shadow: 0 22px 65px rgba(0,0,0,.42);
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .work-thumb{
+      position: relative;
+      height: 170px; /* ✅ smaller to fit 3 columns */
+      overflow:hidden;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(900px 380px at 18% 20%, rgba(255,165,0,.20), transparent 60%),
+        radial-gradient(900px 380px at 82% 20%, rgba(236,72,153,.16), transparent 60%),
+        radial-gradient(900px 380px at 50% 100%, rgba(128,0,128,.18), transparent 60%),
+        rgba(0,0,0,.35);
+    }
+
+    .work-thumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.03);
+      filter: contrast(1.08) saturate(1.1);
+    }
+
+    .work-thumb::after{
+      content:"";
+      position:absolute;
+      inset:-40% -20% auto -20%;
+      height: 140px; /* ✅ smaller */
+      background: var(--grad);
+      opacity: .20;
+      filter: blur(36px);
+      pointer-events:none;
+    }
+
+    .work-body{ padding: 14px 14px 14px; } /* ✅ tighter */
+
+    .work-label{
+      font-size: 11px; /* ✅ smaller */
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      margin-bottom: 8px;
+    }
+
+    .work-title{
+      font-size: 16px; /* ✅ smaller */
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .work-desc{
+      color: var(--muted2);
+      font-size: 13px; /* ✅ smaller */
+      line-height: 1.55;
+      margin-bottom: 10px;
+      max-width: 56ch;
+    }
+
+    .work-cta{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-weight: 800;
+      color: rgba(255,255,255,.90);
+      padding: 6px 0;
+      user-select:none;
+      font-size: 13px;
+    }
+    .work-cta i{
+      width: 18px;
+      height: 18px;
+      display:inline-grid;
+      place-items:center;
+      border-radius: 6px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 11px;
+    }
+
+    /* tags/pills */
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color: rgba(255,255,255,.75);
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+    .pill{
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .pill i{ font-size: 11px; }
+
+    /* ================= CONTACT (NEW LOOK) ================= */
+    .contact{
+      padding: 70px 0 110px;
+      position: relative;
+    }
+    .contact-head{
+      text-align:center;
+      margin-bottom: 34px;
+    }
+    .contact-head h2{
+      font-size: clamp(34px, 5vw, 64px);
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .contact-head p{
+      color: rgba(255,255,255,.72);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 26px;
+      align-items: start;
+      margin-top: 26px;
+    }
+    @media (max-width: 980px){
+      .contact-grid{ grid-template-columns: 1fr; }
+    }
+
+    .contact-left h3{
+      font-size: 30px;
+      font-weight: 950;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .contact-left p{
+      color: rgba(255,255,255,.72);
+      line-height: 1.65;
+      max-width: 60ch;
+      margin-bottom: 22px;
+    }
+
+    .contact-items{
+      display:flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .contact-item{
+      display:flex;
+      gap: 14px;
+      align-items:flex-start;
+    }
+    .contact-icon{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+      position: relative;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .contact-icon::after{
+      content:"";
+      position:absolute;
+      inset:-30px;
+      background: var(--grad);
+      opacity: .22;
+      filter: blur(18px);
+    }
+    .contact-icon i{ position: relative; z-index: 1; }
+
+    .contact-item strong{
+      display:block;
+      font-weight: 950;
+      margin-bottom: 3px;
+    }
+    .contact-item span{
+      display:block;
+      color: rgba(255,255,255,.70);
+      line-height: 1.5;
+    }
+
+    .form-card{
+      border-radius: 22px;
+      padding: 22px;
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(255,165,0,.14), transparent 60%),
+        radial-gradient(900px 420px at 82% 0%, rgba(236,72,153,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.035));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 60px rgba(0,0,0,.32);
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 520px){ .form-grid{ grid-template-columns: 1fr; } }
+
+    label{
+      display:block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      margin: 6px 0 8px;
+    }
+
+    .field{
+      width: 100%;
+      border-radius: 14px;
+      padding: 14px 14px;
+      background: rgba(0,0,0,.20);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #fff;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .field::placeholder{ color: rgba(255,255,255,.45); }
+    .field:focus{
+      border-color: rgba(255,165,0,.55);
+      box-shadow: 0 0 0 4px rgba(255,165,0,.12);
+    }
+
+    textarea.field{
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .send-btn{
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 950;
+      cursor: pointer;
+      background: var(--grad);
+      color: #fff;
+      transition: transform .2s ease, box-shadow .2s ease;
+      margin-top: 12px;
+    }
+    .send-btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+
+      <nav class="header-nav">
+        <a href="home.html#home">Home</a>
+
+        <!-- ✅ Dropdown with selectable items -->
+        <div class="nav-dropdown">
+          <a class="nav-parent" href="home.html#works" aria-haspopup="true" aria-expanded="false">
+            My Works <i class="fa-solid fa-chevron-down"></i>
+          </a>
+
+          <div class="nav-menu" role="menu" aria-label="My Works">
+            <a role="menuitem" href="website.html">Websites</a>
+            <a role="menuitem" href="funnels.html">Funnels</a>
+            <a role="menuitem" href="ai-builds.html">AI Builds</a>
+            <a role="menuitem" href="ai-automation.html">Automations</a>
+          </div>
+        </div>
+
+        <a href="home.html#build">Core Skills</a>
+        <a href="home.html#experience">Experience</a>
+      </nav>
+
+      <a class="header-cta" href="#contact">Collaborate ↗</a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>My <span class="gradient-text">Web Development</span> Work</h1>
+      <p class="sub">
+        A collection of websites I’ve designed and built — optimized for speed, responsiveness, and conversion.
+      </p>
+    </div>
+  </section>
+
+  <!-- FEATURED WORK -->
+  <section class="featured-wrap" id="works">
+    <div class="container">
+      <div class="featured-grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-head">
+        <h2>Get in <span class="gradient-text">Touch</span></h2>
+        <p>Ready to start your project? Let’s create something amazing together.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-left">
+          <h3>Let’s Talk About Your Project</h3>
+          <p>
+            Whether you need a new website, a redesign, or digital strategy consultation,
+            we're here to help. Fill out the form and we'll get back to you within 24 hours.
+          </p>
+
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
+              <div>
+                <strong>Email Me</strong>
+                <span>errolgalejandro@gmail.com</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+              <div>
+                <strong>WhatsApp</strong>
+                <span>+63 969-503-1173</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form class="form-card">
+          <div class="form-grid">
+            <div>
+              <label>First Name</label>
+              <input class="field" type="text" placeholder="John" />
+            </div>
+            <div>
+              <label>Last Name</label>
+              <input class="field" type="text" placeholder="Doe" />
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label>Email Address</label>
+            <input class="field" type="email" placeholder="john@example.com" />
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label>Phone Number</label>
+            <input class="field" type="tel" placeholder="(555) 000-0000" />
+          </div>
+
+          <div>
+            <label>Project Details</label>
+            <textarea class="field" placeholder="Tell us about your project..."></textarea>
+          </div>
+
+          <button class="send-btn" type="button">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Mobile tap support for dropdown
+    const dd = document.querySelector(".nav-dropdown");
+    const trigger = document.querySelector(".nav-parent");
+    const menu = document.querySelector(".nav-menu");
+
+    if (dd && trigger && menu) {
+      trigger.addEventListener("click", (e) => {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        if (isTouch) {
+          e.preventDefault();
+          dd.classList.toggle("open");
+          trigger.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dd.contains(e.target)) {
+          dd.classList.remove("open");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    const projects = [
+      {
+        url: "https://app.gohighlevel.com/v2/preview/LmCvkBYAJosYsREjBkIa",
+        title: "Resin Reach",
+        desc: "Dominate your local epoxy flooring market — AI Epoxy Growth Infrastructure that delivers 10–20 booked projects/month.",
+        tags: ["Epoxy Marketing", "Lead Gen System", "10–20 Projects/mo"],
+        thumb: "website/resin.png"
+      },
+      {
+        url: "https://rosiecuellar.com/home-880300",
+        title: "Rosie Cuellar Campaign",
+        desc: "Campaign website with donation CTA, credibility stats, and clean hero layout.",
+        tags: ["Campaign", "Donation CTA", "Lead capture"],
+        thumb: "website/rosie.png"
+      },
+      {
+        url: "https://jerryforwebb.com/home-v1-7657",
+        title: "Jerry Garza Campaign",
+        desc: "Election campaign landing with strong headline, CTA buttons, and donation flow.",
+        tags: ["Campaign", "Hero CTA", "Donations"],
+        thumb: "website/jerry.png"
+      },
+      {
+        url: "https://baldoforoffice.com/home",
+        title: "Baldo Granados Campaign",
+        desc: "City Council campaign site with bold messaging, supporter CTA, and clean sections.",
+        tags: ["Campaign", "Support CTA", "Branding"],
+        thumb: "website/baldo.png"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/20zNkanCT8lg58diJyzV",
+        title: "Richard Peña Raymond Campaign",
+        desc: "State Representative campaign page with strong visual identity + donation CTA.",
+        tags: ["GHL", "Campaign", "Donate"],
+        thumb: "website/richard.png"
+      },
+      {
+        url: "https://jarochostaqueria.com/home",
+        title: "Jarochos Taqueria",
+        desc: "Restaurant website with hero slider, menu navigation, and strong food imagery.",
+        tags: ["Restaurant", "Menu", "Local SEO"],
+        thumb: "website/jarochos.png"
+      },
+      {
+        url: "https://aymariarestaurant.us/home",
+        title: "Ay Maria Restaurant",
+        desc: "Mexican restaurant site with strong hero, reservation CTA, and brand story section.",
+        tags: ["Restaurant", "Reservations", "DoorDash"],
+        thumb: "website/maria.png"
+      },
+      {
+        url: "https://agavejalisco.com/home-168489",
+        title: "Agave Jalisco",
+        desc: "Restaurant site with book-a-table CTA, menu access, and bold hero image section.",
+        tags: ["Restaurant", "Book a table", "Menu"],
+        thumb: "website/agave.png"
+      },
+      {
+        url: "https://helenmariehomes.com/home",
+        title: "Helen Marie Homes",
+        desc: "Home builder site featuring premium hero imagery, search CTA, and clean navigation.",
+        tags: ["Real Estate", "Home Builder", "Inventory"],
+        thumb: "website/helen.png"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/2E2ZwE68fJRdtHRGLT3L",
+        title: "MP Asset Management",
+        desc: "Property/asset management landing with consultation CTA and service tiles.",
+        tags: ["GHL", "Property", "Consultation"],
+        thumb: "website/mp.png"
+      },
+      {
+        url: "https://escalerataxiservice.com/home",
+        title: "Escalera Taxi Service",
+        desc: "Taxi service site with strong headline, call CTA, and service-focused layout.",
+        tags: ["Service Business", "Local", "Call CTA"],
+        thumb: "website/escaleras.png"
+      },
+      {
+        url: "https://efficientsoccer.com/home-664293",
+        title: "Efficient Soccer",
+        desc: "Sports training site with bold hero, program CTA buttons, and modern layout.",
+        tags: ["Sports", "Programs", "Lead capture"],
+        thumb: "website/efficient.png"
+      },
+      {
+        url: "https://centroecuestrelaredo.com/home",
+        title: "Centro Ecuestre Laredo",
+        desc: "Equestrian site with strong branding, hero video/image, and camp CTA button.",
+        tags: ["Local Business", "Bookings", "Events"],
+        thumb: "website/centro.png"
+      },
+      {
+        url: "https://angeltrevinoarchitecture.com/",
+        title: "Angel Trevino Architecture",
+        desc: "Architecture firm landing page with strong hero section + discovery CTA.",
+        tags: ["Architecture", "Services", "Lead CTA"],
+        thumb: "website/angel.png"
+      },
+      {
+        url: "https://performanceepoxyflooring.com/home-page",
+        title: "Performance Epoxy Flooring",
+        desc: "Epoxy flooring site with quote CTA, promo form, and service-focused layout.",
+        tags: ["Epoxy", "Home Services", "Lead form"],
+        thumb: "website/performance.png"
+      },
+      {
+        url: "https://fusionforceconcretesystems.com/home-page-545469",
+        title: "Fusion Force Concrete Systems",
+        desc: "Concrete coating brand page with CTA buttons and strong hero background.",
+        tags: ["Concrete Coatings", "Quote CTA", "Local"],
+        thumb: "website/fusion.png"
+      },
+      {
+        url: "https://downsouthconcretecoatingsllc.com/homepage",
+        title: "Down South Concrete Coatings",
+        desc: "Floor coating site with CTA button, phone CTA, and clear offer placement.",
+        tags: ["Epoxy", "Phone CTA", "Lead capture"],
+        thumb: "website/down.png"
+      },
+      {
+        url: "https://built-strong.net/home",
+        title: "Built Strong (BST Contracting)",
+        desc: "Contracting + epoxy site with bold messaging, offer CTA, and conversion form.",
+        tags: ["Contracting", "Epoxy", "Lead form"],
+        thumb: "website/bst.png"
+      },
+      {
+        url: "https://atexservicestx.com/home-818298",
+        title: "ATEX Services",
+        desc: "Services site with bold hero messaging, trust elements, and strong CTA layout.",
+        tags: ["Construction", "Telecom", "Services"],
+        thumb: "website/atexv1.png"
+      },
+      {
+        url: "https://atexrentalstx.com/home",
+        title: "ATEX Rentals",
+        desc: "Equipment rental landing with strong hero + clear CTA and equipment positioning.",
+        tags: ["Rentals", "Construction", "Inquiry CTA"],
+        thumb: "website/atexv2.png"
+      },
+      {
+        url: "https://app.gohighlevel.com/v2/preview/hReJrjTle05EoTnQbMYR",
+        title: "Refit Home Improvement",
+        desc: "Modern landing page with minimal design, trust messaging, and strong CTA.",
+        tags: ["GHL", "Home Improvement", "Lead CTA"],
+        thumb: "website/marcela.png"
+      }
+    ];
+
+    const grid = document.getElementById("portfolioGrid");
+
+    projects.forEach((p) => {
+      const tagsHtml = (p.tags || []).slice(0, 3).map(t => `
+        <span class="pill"><i class="fa-solid fa-tag"></i> ${t}</span>
+      `).join("");
+
+      const card = document.createElement("a");
+      card.className = "work-card";
+      card.href = p.url;
+      card.target = "_blank";
+      card.rel = "noopener";
+
+      card.innerHTML = `
+        <div class="work-inner">
+          <div class="work-thumb">
+            <img loading="lazy"
+                 src="${p.thumb}"
+                 alt="Preview of ${p.title}"
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/1200x700?text=Preview+Unavailable';">
+          </div>
+          <div class="work-body">
+            <div class="work-label">WEB DEVELOPMENT</div>
+            <div class="work-title">${p.title}</div>
+            <div class="work-desc">${p.desc}</div>
+            <div class="work-cta">
+              View Project <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+            <div class="meta">
+              ${tagsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

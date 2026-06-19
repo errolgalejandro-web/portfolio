@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>Lovable Builds | Portfolio</title>
+
+  <style>
+/* ================= BASE ================= */
+*{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif; }
+html{ scroll-behavior:smooth; }
+
+body{
+  background:#0b0b0b;
+  color:#fff;
+  overflow-x:hidden;
+  position:relative;
+  isolation:isolate;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size:72px 72px;
+  opacity:.22;
+  mask-image:radial-gradient(circle at 50% 18%, black 55%, transparent 85%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 18% 10%, rgba(255,165,0,.18), transparent 60%),
+    radial-gradient(860px 520px at 82% 18%, rgba(236,72,153,.14), transparent 62%),
+    radial-gradient(980px 560px at 52% 95%, rgba(128,0,128,.16), transparent 66%),
+    radial-gradient(1200px 700px at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,.75));
+  opacity:1;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:0 24px;
+  width:100%;
+}
+@media (max-width:480px){
+  .container{ padding:0 16px; }
+}
+
+/* ================= HEADER ================= */
+.header{
+  position:fixed;
+  top:24px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1000;
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  gap:28px;
+  padding:14px 28px;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(14px);
+  border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  max-width:calc(100vw - 24px); /* ✅ avoid horizontal overflow */
+}
+.header-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  white-space:nowrap;
+  min-width:0;
+}
+.header-logo img{
+  height:50px;
+  width:auto;
+  display:block;
+  max-width:100%;
+}
+
+.header-nav{ display:flex; gap:24px; align-items:center; }
+.header-nav a{
+  text-decoration:none;
+  font-weight:600;
+  color:#111827;
+  font-size:15px;
+  position:relative;
+}
+.header-nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:linear-gradient(to right, orange, hotpink, purple);
+  transition:width .3s ease;
+}
+.header-nav a:hover::after{ width:100%; }
+
+.header-cta{
+  padding:12px 22px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:15px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg, orange, hotpink, purple);
+  color:white;
+  transition:transform .25s ease, box-shadow .25s ease;
+  text-decoration:none;
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+.header-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+/* Dropdown */
+.nav-dropdown{ position:relative; display:inline-flex; align-items:center; }
+.nav-parent{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  font-weight:600;
+  color:#111827;
+  font-size:15px;
+  position:relative;
+  cursor:pointer;
+  padding:2px 0;
+}
+.nav-parent::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:linear-gradient(to right, orange, hotpink, purple);
+  transition:width .3s ease;
+}
+.nav-dropdown:hover .nav-parent::after{ width:100%; }
+.nav-parent i{ font-size:12px; opacity:.75; transform:translateY(1px); }
+
+.nav-menu{
+  position:absolute;
+  top:calc(100% + 14px);
+  left:0;
+  min-width:220px;
+  padding:10px;
+  border-radius:16px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(17,24,39,.08);
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  display:none;
+  z-index:2000;
+}
+.nav-dropdown:hover .nav-menu{ display:block; }
+.nav-dropdown.open .nav-menu{ display:block; }
+
+.nav-menu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  color:#111827;
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px;
+  white-space:nowrap;
+}
+.nav-menu a:hover{ background:rgba(17,24,39,.06); }
+
+.nav-menu::before{
+  content:"";
+  position:absolute;
+  top:-8px;
+  left:18px;
+  width:14px;
+  height:14px;
+  background:rgba(255,255,255,.92);
+  transform:rotate(45deg);
+  border-left:1px solid rgba(17,24,39,.08);
+  border-top:1px solid rgba(17,24,39,.08);
+}
+.nav-dropdown::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:100%;
+  width:240px;
+  height:18px;
+}
+
+/* ✅ Mobile header layout (full width, no overflow) */
+/* ✅ Mobile: show nav, hide Collaborate button */
+@media (max-width: 768px) {
+  /* hide CTA button */
+  .header-cta { display: none !important; }
+
+  /* show nav on mobile */
+  .header-nav { 
+    display: flex !important;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;            /* allow wrapping if needed */
+  }
+
+  /* keep header layout stable without CTA */
+  .header { top: 16px; left: 12px; right: 12px; transform: none; }
+  .header-inner { 
+    width: 100%;
+    gap: 12px;
+    padding: 10px 12px;
+    justify-content: flex-start; /* logo + nav */
+  }
+
+  /* make links slightly smaller so they fit */
+  .header-nav a,
+  .nav-parent { font-size: 14px; }
+
+  /* dropdown: keep inside viewport on small screens */
+  .nav-menu { 
+    left: 0;
+    right: auto;
+    max-width: calc(100vw - 48px);
+  }
+}
+
+/* ✅ Extra small phones: tighter spacing */
+@media (max-width: 420px) {
+  .header-nav { gap: 10px; }
+  .header-nav a,
+  .nav-parent { font-size: 13px; }
+}
+
+/* ================= PAGE HERO ================= */
+.page-hero{
+  min-height:58vh;
+  display:flex;
+  align-items:flex-end;
+  padding:140px 0 42px;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+@media (max-width:768px){
+  .page-hero{
+    min-height:60svh;                 /* ✅ better on mobile browsers */
+    padding:110px 0 32px;             /* ✅ less top padding */
+  }
+}
+
+.page-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("ai/back.png") center/cover no-repeat;
+  opacity:.55;
+  transform:scale(1.03);
+  filter:contrast(1.08) saturate(1.1);
+  z-index:0;
+  pointer-events:none;
+}
+.page-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom right, rgba(0,0,0,.70), rgba(0,0,0,.88));
+  z-index:0;
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; }
+
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:12px;
+  color:rgba(255,255,255,.85);
+  margin-bottom:14px;
+}
+
+h1{
+  font-size:clamp(36px, 6vw, 72px);
+  font-weight:900;
+  line-height:1.05;
+  margin-bottom:12px;
+  word-break:break-word; /* ✅ */
+}
+
+.gradient-text{
+  background:linear-gradient(to right, orange, hotpink, purple);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.sub{
+  color:rgba(255,255,255,.78);
+  max-width:820px;
+  line-height:1.6;
+  font-size:16px;
+}
+@media (max-width:520px){
+  .sub{ font-size:14px; }
+}
+
+.page-actions{
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.btn{
+  padding:14px 26px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  transition:all .25s ease;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+@media (max-width:520px){
+  .btn{ padding:12px 18px; font-size:14px; }
+}
+
+.btn-dark{
+  background:#fff;
+  color:#111;
+  border:none;
+}
+.btn-dark:hover{ transform:translateY(-2px); }
+
+.btn-outline{
+  background:transparent;
+  border:2px solid rgba(255,255,255,.35);
+  color:#fff;
+}
+.btn-outline:hover{
+  border-color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.06);
+  transform:translateY(-2px);
+}
+
+/* ================= GRID ================= */
+.grid-wrap{
+  padding:42px 0 90px;
+  background:
+    radial-gradient(900px 420px at 18% 18%, rgba(255,165,0,.10), transparent 60%),
+    radial-gradient(820px 420px at 82% 28%, rgba(236,72,153,.08), transparent 62%),
+    radial-gradient(980px 520px at 52% 92%, rgba(128,0,128,.10), transparent 66%),
+    linear-gradient(#0b0b0b, #0b0b0b);
+}
+@media (max-width:768px){
+  .grid-wrap{ padding:34px 0 74px; }
+}
+
+/* ✅ 4-column grid + responsive breakpoints */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:18px;
+}
+@media (max-width:1100px){ .grid{ grid-template-columns:repeat(3, 1fr); } }
+@media (max-width:900px){ .grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:640px){ .grid{ grid-template-columns:1fr; } }
+
+/* ================= CARD ================= */
+.card{
+  position:relative;
+  border-radius:18px;
+  padding:1px;
+  background:linear-gradient(135deg,
+    rgba(255,165,0,.55),
+    rgba(236,72,153,.45),
+    rgba(128,0,128,.55)
+  );
+  text-decoration:none;
+  color:inherit;
+  overflow:hidden;
+  transform:translateZ(0);
+  display:block;
+}
+
+.card-inner{
+  border-radius:17px;
+  background:
+    radial-gradient(1200px 520px at 14% 0%, rgba(255,165,0,.18), transparent 55%),
+    radial-gradient(1200px 520px at 86% 0%, rgba(236,72,153,.14), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.035));
+  border:1px solid rgba(255,255,255,.10);
+  overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.card:hover .card-inner{
+  transform:translateY(-6px);
+  box-shadow:0 22px 65px rgba(0,0,0,.42);
+  border-color:rgba(255,255,255,.16);
+}
+
+.thumb{
+  position:relative;
+  width:100%;
+  height:150px;
+  background:rgba(0,0,0,.35);
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+@media (max-width:520px){
+  .thumb{ height:200px; } /* ✅ more impact on 1-col */
+}
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transform:scale(1.03);
+  filter:contrast(1.08) saturate(1.1);
+}
+.thumb::after{
+  content:"";
+  position:absolute;
+  inset:-40% -20% auto -20%;
+  height:140px;
+  background:linear-gradient(to right, orange, hotpink, purple);
+  opacity:.20;
+  filter:blur(36px);
+  pointer-events:none;
+}
+
+.body{ padding:14px; }
+
+.label{
+  display:inline-block;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.70);
+  margin-bottom:8px;
+}
+.title{
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:8px;
+  line-height:1.2;
+  word-break:break-word;
+}
+.desc{
+  font-size:13px;
+  color:rgba(255,255,255,.75);
+  line-height:1.55;
+  margin-bottom:10px;
+  word-break:break-word;
+}
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  color:rgba(255,255,255,.75);
+  font-size:11px;
+  font-weight:800;
+}
+.pill{
+  padding:6px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.pill i{ font-size:11px; }
+
+/* ================= FOOTER MINI ================= */
+footer{
+  background:#111;
+  padding:40px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  flex-wrap:wrap;
+}
+@media (max-width:520px){
+  .footer-inner{ justify-content:center; text-align:center; }
+}
+.muted{ color:rgba(255,255,255,.55); font-weight:700; }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+
+      <nav class="header-nav">
+        <a href="home.html#home">Home</a>
+
+        <div class="nav-dropdown">
+          <a class="nav-parent" href="home.html#works" aria-haspopup="true" aria-expanded="false">
+            My Works <i class="fa-solid fa-chevron-down"></i>
+          </a>
+
+          <div class="nav-menu" role="menu" aria-label="My Works">
+            <a role="menuitem" href="website.html">Websites</a>
+            <a role="menuitem" href="funnels.html">Funnels</a>
+            <a role="menuitem" href="ai-builds.html">AI Builds</a>
+            <a role="menuitem" href="ai-automation.html">Automations</a>
+          </div>
+        </div>
+
+        <a href="home.html#build">Core Skills</a>
+        <a href="home.html#experience">Experience</a>
+      </nav>
+
+      <a class="header-cta" href="home.html#collab">Collaborate ↗</a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="kicker"><i class="fa-solid fa-layer-group"></i> Lovable Builds</div>
+      <h1>Sites <span class="gradient-text">Showcasing</span> Modern UI</h1>
+      <p class="sub">
+        I utilize AI to build high-quality websites within a day—faster turnaround without compromising design or performance.      </p>
+
+      <div class="page-actions">
+        <a class="btn btn-dark" href="home.html#works"><i class="fa-solid fa-arrow-left"></i> Back to Featured</a>
+        <a class="btn btn-outline" href="home.html#collab"><i class="fa-solid fa-calendar"></i> Let’s Talk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="grid-wrap">
+    <div class="container">
+      <div class="grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="muted">© 2024 All rights reserved</div>
+      <div class="muted">Lovable • Websites • UI Systems</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile tap support for dropdown
+    const dd = document.querySelector(".nav-dropdown");
+    const trigger = document.querySelector(".nav-parent");
+    const menu = document.querySelector(".nav-menu");
+
+    if (dd && trigger && menu) {
+      trigger.addEventListener("click", (e) => {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        if (isTouch) {
+          e.preventDefault();
+          dd.classList.toggle("open");
+          trigger.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dd.contains(e.target)) {
+          dd.classList.remove("open");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    /*
+      ✅ Template Notes
+      - Replace thumb paths with your images (keep same aspect ratio)
+      - Replace urls if you want (links are already present for every project)
+    */
+    const projects = [
+      {
+        url: "https://marketing-styles-gallery.lovable.app/",
+        title: "Houston Marketing — Next-Gen Digital Marketing",
+        desc: "Marketing website concept with modern sections, strong CTA flow, and conversion-forward layout.",
+        tags: ["Marketing", "Landing", "CRO"],
+        thumb: "ai/h-marketing.png"
+      },
+      {
+        url: "https://bay-area-bloom.lovable.app/",
+        title: "San Jose Web Design — Bay Area Business Sites",
+        desc: "Service-style web design layout built for local businesses with clean hierarchy and trust sections.",
+        tags: ["Web Design", "Agency", "Local SEO"],
+        thumb: "ai/sj-webdesign.png"
+      },
+      {
+        url: "https://theme-palette-gems.lovable.app/",
+        title: "Theme Palette Gems",
+        desc: "Theme and palette showcase template for quickly presenting UI styles and brand color directions.",
+        tags: ["Themes", "Palette", "UI"],
+        thumb: "ai/simple-accounting.png"
+      },
+      {
+        url: "https://drive-smart-service.lovable.app/",
+        title: "Drive Smart Service",
+        desc: "Automotive/service-style website template highlighting offers, service steps, and booking intent.",
+        tags: ["Automotive", "Service", "Booking"],
+        thumb: "ai/speedy-auto.png"
+      },
+      {
+        url: "https://portland-petal-designs.lovable.app/",
+        title: "Portland Florist — Where Nature Meets Artistry",
+        desc: "Florist site concept with elegant product/collection flow and premium visual storytelling.",
+        tags: ["Florist", "Ecommerce", "Brand"],
+        thumb: "ai/p-florist.png"
+      },
+      {
+        url: "https://pgh-bakes-visions.lovable.app/",
+        title: "Pittsburgh Bakery — Artisan Breads & Pastries",
+        desc: "Bakery landing page built around product highlights, social proof, and simple conversion paths.",
+        tags: ["Food", "Landing", "Menu"],
+        thumb: "ai/pitts-bakery.png"
+      },
+      {
+        url: "https://pittsburgh-craft-studio.lovable.app/",
+        title: "Pittsburgh Home Repairs — Local Repair Services",
+        desc: "Home repair services template featuring service cards, trust builders, and quote-ready CTAs.",
+        tags: ["Home Services", "Local", "Lead Gen"],
+        thumb: "ai/pitts-homerepair.png"
+      },
+      {
+        url: "https://fortlauderdale-light-studio.lovable.app/",
+        title: "Fort Lauderdale Photography — Light Studio",
+        desc: "Photography portfolio-style site focused on galleries, packages, and premium booking prompts.",
+        tags: ["Photography", "Portfolio", "Booking"],
+        thumb: "ai/fort-wedding.png"
+      },
+      {
+        url: "https://fortlauderdale-smile-concepts.lovable.app/",
+        title: "Fort Lauderdale Dentist — Cosmetic & Family",
+        desc: "Dental clinic website concept with service blocks, credibility sections, and appointment CTAs.",
+        tags: ["Healthcare", "Clinic", "Appointments"],
+        thumb: "ai/fort-dentist.png"
+      },
+      {
+        url: "https://cincy-design-spark.lovable.app/",
+        title: "Cincinnati Web Design — Modern Digital Agency",
+        desc: "Agency homepage layout with clear services, case study positioning, and strong contact funnel.",
+        tags: ["Agency", "Web Design", "Lead Gen"],
+        thumb: "ai/cinci-webdesign.png"
+      },
+      {
+        url: "https://cincy-comfort-flow.lovable.app/",
+        title: "Cincinnati HVAC — Heating & Air Services",
+        desc: "HVAC services site template featuring emergency messaging, service areas, and quote conversions.",
+        tags: ["HVAC", "Local", "Service"],
+        thumb: "ai/cinci-hvac.png"
+      },
+      {
+        url: "https://cincy-law-visions.lovable.app/",
+        title: "Cincinnati Lawyers — Premier Legal Services",
+        desc: "Law firm website concept with practice areas, trust markers, and consultation-first CTAs.",
+        tags: ["Legal", "Services", "Consultation"],
+        thumb: "ai/cinci-lawyer.png"
+      },
+      {
+        url: "https://portland-ai-builder.lovable.app/",
+        title: "Web Design Portland — Leading Web Design Agency",
+        desc: "Portland agency template emphasizing modern design, benefits, and clear inquiry pathways.",
+        tags: ["Web Design", "Portland", "Agency"],
+        thumb: "ai/wdp.png"
+      },
+      {
+        url: "https://portland-ai-site-styles.lovable.app/",
+        title: "SEO Portland — Top-Rated SEO Services",
+        desc: "SEO services template with offer clarity, process sections, and conversion-focused page structure.",
+        tags: ["SEO", "Growth", "Local"],
+        thumb: "ai/p-seo.png"
+      },
+      {
+        url: "https://tire-design-palette.lovable.app/",
+        title: "H-Town Tires — 24/7 Emergency Tire Service",
+        desc: "Tire shop template built for urgency: services, emergency callouts, and fast customer actions.",
+        tags: ["Tires", "24/7", "Urgent"],
+        thumb: "ai/towntires.png"
+      },
+      {
+        url: "https://houston-auto-hub.lovable.app/",
+        title: "Houston Auto Hub — Trusted Automotive Experts",
+        desc: "Mechanic services site concept featuring service menus, credibility blocks, and appointment CTAs.",
+        tags: ["Mechanic", "Auto", "Service"],
+        thumb: "ai/h-auto.png"
+      },
+      {
+        url: "https://h-town-visions.lovable.app/",
+        title: "Houston Magazine — Culture, Style & Stories",
+        desc: "Magazine/editorial layout template designed for featured stories, categories, and content discovery.",
+        tags: ["Editorial", "Magazine", "Content"],
+        thumb: "ai/houstion.png"
+      },
+
+        {
+        url: "https://atlanta-italian-rest-6ayo.bolt.host/",
+        title: "Atlanta Italian Restaurant Website Design",
+        desc: "Italian restaurant concept layout with menu-style sections, reservations/CTA flow, and brand-forward visuals.",
+        tags: ["Restaurant", "Branding", "Landing"],
+        thumb: "ai/italian.png"
+        },
+        {
+        url: "https://san-diego-comfort-codes.lovable.app/",
+        title: "San Diego HVAC Experts | Comfort Experts Heating & Cooling",
+        desc: "HVAC services site with trust sections, service blocks, and conversion-first booking/quote CTAs.",
+        tags: ["HVAC", "Local", "Service"],
+        thumb: "ai/comfort-ex.png"
+        },
+        {
+        url: "https://san-diego-green-dreams.lovable.app/",
+        title: "Eco-Friendly San Diego Landscaping | Sustainable Landscape Design",
+        desc: "Sustainable landscaping concept emphasizing eco services, project highlights, and lead-gen structure.",
+        tags: ["Landscaping", "Eco", "Lead Gen"],
+        thumb: "ai/sd-landscape.png"
+        },
+        {
+        url: "https://sandiego-legal-showcase.lovable.app/",
+        title: "San Diego Legal Group | Trusted Legal Representation",
+        desc: "Law firm layout with practice areas, credibility sections, and consultation-focused CTAs.",
+        tags: ["Legal", "Services", "Consultation"],
+        thumb: "ai/sd-legal.png"
+        },
+        {
+        url: "https://phoenix-plumber-designs.lovable.app/",
+        title: "Phoenix Plumber - Reliable Plumbing Solutions in Phoenix",
+        desc: "Plumbing services template built around urgency, service list, and quote/booking actions.",
+        tags: ["Plumbing", "Emergency", "Local"],
+        thumb: "ai/p-plumber.png"
+        },
+        {
+        url: "https://phoenix-design-vault.lovable.app/",
+        title: "Phoenix Financial Planner - Your Partner in Building a Secure Financial Future",
+        desc: "Financial planner site concept with benefits, process clarity, and consultation conversion flow.",
+        tags: ["Finance", "Consultation", "Trust"],
+        thumb: "ai/p-financial.png"
+        },
+        {
+        url: "https://phoenix-design-palette.lovable.app/",
+        title: "Phoenix Real Estate | Find Your Dream Home in Arizona",
+        desc: "Real estate template featuring listings-style sections, trust building, and inquiry-ready CTAs.",
+        tags: ["Real Estate", "Listings", "Lead Gen"],
+        thumb: "ai/p-estate.png"
+        },
+        {
+        url: "https://law-firm-design-conc-z3m1.bolt.host/",
+        title: "Law Firm Design Concepts",
+        desc: "Legal website concept set highlighting layout patterns for practice areas, trust, and consult CTAs.",
+        tags: ["Legal", "Concept", "UI"],
+        thumb: "ai/p-legal.png"
+        },
+        {
+        url: "https://seattle-hvac-premium-gvyd.bolt.host/",
+        title: "Seattle HVAC Premium Website Concepts",
+        desc: "Premium HVAC design concepts with strong hierarchy, service sections, and quote-focused structure.",
+        tags: ["HVAC", "Premium", "Service"],
+        thumb: "ai/s-hvac.png"
+        },
+        {
+        url: "https://advanced-home-builde-ys4b.bolt.host/",
+        title: "Advanced Home Builder Website Designs",
+        desc: "Home builder concept layouts built for showcasing projects, process, and lead capture.",
+        tags: ["Home Builder", "Portfolio", "Lead Gen"],
+        thumb: "ai/s-builder.png"
+        },
+        {
+        url: "https://seattle-lawyer-web-d-lnbi.bolt.host/",
+        title: "Seattle Lawyer Web Design Prompts",
+        desc: "Lawyer website concept prompts and layout directions focused on consultations and credibility.",
+        tags: ["Legal", "Concept", "Copy/UX"],
+        thumb: "ai/s-lawyer.png"
+        },
+        {
+        url: "https://modern-luxury-skylin-8x1j.bolt.host/",
+        title: "Modern Luxury Skyline Hero",
+        desc: "Luxury hero/header concept focused on premium typography, visuals, and high-end branding feel.",
+        tags: ["Luxury", "Hero", "Branding"],
+        thumb: "ai/s-estate.png"
+        },
+        {
+        url: "https://baltimore-hvac-websi-958b.bolt.host/",
+        title: "Baltimore HVAC Website Design Concepts",
+        desc: "HVAC website concepts with services, trust sections, and conversion-first quote flows.",
+        tags: ["HVAC", "Local", "Concept"],
+        thumb: "ai/premier.png"
+        },
+        {
+        url: "https://baltimore-home-build-s4l7.bolt.host/",
+        title: "Baltimore Home Builder Web Concepts",
+        desc: "Home builder concept layouts featuring project galleries, process blocks, and lead capture.",
+        tags: ["Home Builder", "Concept", "Portfolio"],
+        thumb: "ai/b-builder.png"
+        },
+        {
+        url: "https://baltimore-lawyer-web-p9b5.bolt.host/",
+        title: "Baltimore Lawyer Website Design Concepts",
+        desc: "Law firm design concepts built for showcasing practice areas and driving consultation requests.",
+        tags: ["Legal", "Concept", "Consultation"],
+        thumb: "ai/b-lawyer.png"
+        },
+        {
+        url: "https://omaha-home-builder-a-m35a.bolt.host/",
+        title: "Omaha Home Builder Advanced Website Design",
+        desc: "Advanced home builder concept emphasizing high-end visuals, project showcases, and inquiry CTAs.",
+        tags: ["Home Builder", "Advanced", "Lead Gen"],
+        thumb: "ai/o-builder.png"
+        },
+        {
+        url: "https://new-chat-5u99.bolt.host/",
+        title: "New chat",
+        desc: "Generic placeholder project entry (update title/description if this build is renamed).",
+        tags: ["Placeholder", "Update Me", "Draft"],
+        thumb: "ai/no-builder.png"
+        },
+        {
+        url: "https://atlanta-interior-des-v6ug.bolt.host/",
+        title: "Atlanta Interior Designer Website Concepts",
+        desc: "Interior design concept layouts featuring portfolio sections, service highlights, and inquiry CTAs.",
+        tags: ["Interior Design", "Portfolio", "Lead Gen"],
+        thumb: "ai/a-interior.png"
+        },
+        {
+        url: "https://atlanta-grill-barbec-bqyg.bolt.host/",
+        title: "Atlanta Grill & Barbecue Branding",
+        desc: "BBQ/Grill brand concept layout with menu-style sections, bold visuals, and conversion CTAs.",
+        tags: ["Restaurant", "BBQ", "Branding"],
+        thumb: "ai/a-grill.png"
+        },
+        {
+        url: "https://atlanta-dog-training-tlk6.bolt.host/",
+        title: "Atlanta Dog Training Website Design",
+        desc: "Dog training services template with program blocks, trust elements, and booking-ready CTAs.",
+        tags: ["Pet Services", "Local", "Booking"],
+        thumb: "ai/a-dogtraining.png"
+        },
+        {
+        url: "https://atlanta-pool-cleanin-l0ih.bolt.host/",
+        title: "Atlanta Pool Cleaning Website Design",
+        desc: "Pool cleaning service layout built for recurring service plans, trust sections, and quick quotes.",
+        tags: ["Pool Service", "Local", "Lead Gen"],
+        thumb: "ai/a-pool.png"
+        },
+        {
+        url: "https://atlanta-roofing-webs-i1e2.bolt.host/",
+        title: "Atlanta Roofing Website Design",
+        desc: "Roofing services template with offer clarity, proof sections, and quote-first conversion flow.",
+        tags: ["Roofing", "Emergency", "Service"],
+        thumb: "ai/a-roofing.png"
+        },
+        {
+        url: "https://phoenix-reborn-view.lovable.app/",
+        title: "Phoenix Pool Service | Professional Pool Care & Maintenance",
+        desc: "Pool care site concept designed for fast calls/quotes, service tiers, and local trust-building.",
+        tags: ["Pool Service", "Maintenance", "Local"],
+        thumb: "ai/p-pool.png"
+        },
+        {
+        url: "https://phoenix-fabric-art.lovable.app/",
+        title: "Phoenix Dry Cleaning - Expert Fabric Care & Professional Cleaning Services",
+        desc: "Dry cleaning service template highlighting fabric care, pickup/service details, and conversion CTAs.",
+        tags: ["Dry Cleaning", "Local", "Service"],
+        thumb: "ai/p-cleaning.png"
+        },
+        {
+        url: "https://phoenix-locksmith-visions.lovable.app/",
+        title: "Phoenix Locksmith | 24/7 Emergency Lockout Service | 15-Min Response",
+        desc: "Locksmith emergency template centered on urgency messaging, services, and fast contact actions.",
+        tags: ["Locksmith", "24/7", "Emergency"],
+        thumb: "ai/p-lock.png"
+        },
+        {
+        url: "https://sfw-design-visions.lovable.app/",
+        title: "San Francisco Welding — Design Concepts",
+        desc: "Welding business concept layout showcasing services, capabilities, and quote-first CTAs.",
+        tags: ["Welding", "Industrial", "Service"],
+        thumb: "ai/sf-welding.png"
+        },
+        {
+        url: "https://sf-legal-essence.lovable.app/",
+        title: "SF Legal - Experienced San Francisco Lawyer | 25+ Years",
+        desc: "San Francisco legal services template with authority positioning, practice areas, and consult CTAs.",
+        tags: ["Legal", "SF", "Consultation"],
+        thumb: "ai/anderson.png"
+        },
+
+    ];
+
+    const grid = document.getElementById("portfolioGrid");
+
+    projects.forEach((p) => {
+      const tagsHtml = (p.tags || []).slice(0, 3).map(t => `
+        <span class="pill"><i class="fa-solid fa-tag"></i> ${t}</span>
+      `).join("");
+
+      const card = document.createElement("a");
+      card.className = "card";
+      card.href = p.url;             // ✅ link already present (replace if you want)
+      card.target = "_blank";
+      card.rel = "noopener";
+
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="thumb">
+            <img loading="lazy"
+                 src="${p.thumb}"
+                 alt="Preview of ${p.title}"
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/1200x700?text=Add+Thumbnail+In+ai%2F';">
+          </div>
+          <div class="body">
+            <div class="label">Website</div>
+            <div class="title">${p.title}</div>
+            <div class="desc">${p.desc}</div>
+            <div class="meta">
+              <span class="pill"><i class="fa-solid fa-arrow-up-right-from-square"></i> View</span>
+              ${tagsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

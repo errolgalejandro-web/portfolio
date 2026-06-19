@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>AI Automation Builds | Portfolio</title>
+  <style>
+/* ================= BASE ================= */
+*{ box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif; }
+html{ scroll-behavior:smooth; }
+body{
+  background:#0b0b0b;
+  color:#fff;
+  overflow-x:hidden;
+  position:relative;
+  isolation:isolate;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size:72px 72px;
+  opacity:.22;
+  mask-image:radial-gradient(circle at 50% 18%, black 55%, transparent 85%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 18% 10%, rgba(99,102,241,.20), transparent 60%),
+    radial-gradient(860px 520px at 82% 18%, rgba(168,85,247,.16), transparent 62%),
+    radial-gradient(980px 560px at 52% 95%, rgba(59,130,246,.16), transparent 66%),
+    radial-gradient(1200px 700px at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,.75));
+  opacity:1;
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:0 24px;
+  width:100%;
+}
+@media (max-width:480px){
+  .container{ padding:0 16px; }
+}
+
+/* ================= HEADER ================= */
+.header{
+  position:fixed;
+  top:24px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1000;
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  gap:28px;
+  padding:14px 28px;
+  background:rgba(255,255,255,.85);
+  backdrop-filter:blur(14px);
+  border-radius:999px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  max-width:calc(100vw - 24px);
+}
+.header-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  white-space:nowrap;
+  min-width:0;
+}
+.header-logo img{
+  height:50px;
+  width:auto;
+  display:block;
+  max-width:100%;
+}
+.header-nav{ display:flex; gap:24px; align-items:center; }
+.header-nav a{
+  text-decoration:none;
+  font-weight:600;
+  color:#111827;
+  font-size:15px;
+  position:relative;
+}
+.header-nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:linear-gradient(to right, #6366f1, #a855f7, #3b82f6);
+  transition:width .3s ease;
+}
+.header-nav a:hover::after{ width:100%; }
+.header-cta{
+  padding:12px 22px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:15px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg, #6366f1, #a855f7, #3b82f6);
+  color:white;
+  transition:transform .25s ease, box-shadow .25s ease;
+  text-decoration:none;
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+.header-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(99,102,241,.35);
+}
+/* Dropdown */
+.nav-dropdown{ position:relative; display:inline-flex; align-items:center; }
+.nav-parent{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  font-weight:600;
+  color:#111827;
+  font-size:15px;
+  position:relative;
+  cursor:pointer;
+  padding:2px 0;
+}
+.nav-parent::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:0;
+  height:2px;
+  background:linear-gradient(to right, #6366f1, #a855f7, #3b82f6);
+  transition:width .3s ease;
+}
+.nav-dropdown:hover .nav-parent::after{ width:100%; }
+.nav-parent i{ font-size:12px; opacity:.75; transform:translateY(1px); }
+.nav-menu{
+  position:absolute;
+  top:calc(100% + 14px);
+  left:0;
+  min-width:220px;
+  padding:10px;
+  border-radius:16px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(17,24,39,.08);
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  display:none;
+  z-index:2000;
+}
+.nav-dropdown:hover .nav-menu{ display:block; }
+.nav-dropdown.open .nav-menu{ display:block; }
+.nav-menu a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  color:#111827;
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px;
+  white-space:nowrap;
+}
+.nav-menu a:hover{ background:rgba(17,24,39,.06); }
+.nav-menu::before{
+  content:"";
+  position:absolute;
+  top:-8px;
+  left:18px;
+  width:14px;
+  height:14px;
+  background:rgba(255,255,255,.92);
+  transform:rotate(45deg);
+  border-left:1px solid rgba(17,24,39,.08);
+  border-top:1px solid rgba(17,24,39,.08);
+}
+.nav-dropdown::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:100%;
+  width:240px;
+  height:18px;
+}
+@media (max-width: 768px) {
+  .header-cta { display: none !important; }
+  .header-nav {
+    display: flex !important;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .header { top: 16px; left: 12px; right: 12px; transform: none; }
+  .header-inner {
+    width: 100%;
+    gap: 12px;
+    padding: 10px 12px;
+    justify-content: flex-start;
+  }
+  .header-nav a,
+  .nav-parent { font-size: 14px; }
+  .nav-menu {
+    left: 0;
+    right: auto;
+    max-width: calc(100vw - 48px);
+  }
+}
+@media (max-width: 420px) {
+  .header-nav { gap: 10px; }
+  .header-nav a,
+  .nav-parent { font-size: 13px; }
+}
+
+/* ================= PAGE HERO ================= */
+.page-hero{
+  min-height:58vh;
+  display:flex;
+  align-items:flex-end;
+  padding:140px 0 42px;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+@media (max-width:768px){
+  .page-hero{
+    min-height:60svh;
+    padding:110px 0 32px;
+  }
+}
+.page-hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("ai/back.png") center/cover no-repeat;
+  opacity:.45;
+  transform:scale(1.03);
+  filter:contrast(1.08) saturate(1.1);
+  z-index:0;
+  pointer-events:none;
+}
+.page-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom right, rgba(10,10,30,.82), rgba(0,0,0,.90));
+  z-index:0;
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; }
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(99,102,241,.15);
+  border:1px solid rgba(99,102,241,.30);
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:12px;
+  color:rgba(200,200,255,.90);
+  margin-bottom:14px;
+}
+h1{
+  font-size:clamp(36px, 6vw, 72px);
+  font-weight:900;
+  line-height:1.05;
+  margin-bottom:12px;
+  word-break:break-word;
+}
+.gradient-text{
+  background:linear-gradient(to right, #818cf8, #c084fc, #60a5fa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.sub{
+  color:rgba(255,255,255,.78);
+  max-width:820px;
+  line-height:1.6;
+  font-size:16px;
+}
+@media (max-width:520px){
+  .sub{ font-size:14px; }
+}
+.page-actions{
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.btn{
+  padding:14px 26px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  transition:all .25s ease;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+@media (max-width:520px){
+  .btn{ padding:12px 18px; font-size:14px; }
+}
+.btn-dark{
+  background:#fff;
+  color:#111;
+  border:none;
+}
+.btn-dark:hover{ transform:translateY(-2px); }
+.btn-outline{
+  background:transparent;
+  border:2px solid rgba(255,255,255,.35);
+  color:#fff;
+}
+.btn-outline:hover{
+  border-color:rgba(255,255,255,.65);
+  background:rgba(255,255,255,.06);
+  transform:translateY(-2px);
+}
+
+/* ================= STATS BAR ================= */
+.stats-bar{
+  display:flex;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+.stat-item{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.stat-num{
+  font-size:22px;
+  font-weight:900;
+  background:linear-gradient(to right, #818cf8, #c084fc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.stat-label{
+  font-size:12px;
+  color:rgba(255,255,255,.55);
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+/* ================= GRID ================= */
+.grid-wrap{
+  padding:42px 0 90px;
+  background:
+    radial-gradient(900px 420px at 18% 18%, rgba(99,102,241,.08), transparent 60%),
+    radial-gradient(820px 420px at 82% 28%, rgba(168,85,247,.07), transparent 62%),
+    radial-gradient(980px 520px at 52% 92%, rgba(59,130,246,.08), transparent 66%),
+    linear-gradient(#0b0b0b, #0b0b0b);
+}
+@media (max-width:768px){
+  .grid-wrap{ padding:34px 0 74px; }
+}
+
+/* Section label */
+.section-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+  color:rgba(255,255,255,.45);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.section-label::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:rgba(255,255,255,.10);
+}
+
+/* ✅ 3-column grid – automation screenshots are wide, 3 works better */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:20px;
+}
+@media (max-width:1000px){ .grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:640px){ .grid{ grid-template-columns:1fr; } }
+
+/* ================= CARD ================= */
+.card{
+  position:relative;
+  border-radius:20px;
+  padding:1px;
+  background:linear-gradient(135deg,
+    rgba(99,102,241,.55),
+    rgba(168,85,247,.45),
+    rgba(59,130,246,.55)
+  );
+  text-decoration:none;
+  color:inherit;
+  overflow:hidden;
+  transform:translateZ(0);
+  display:block;
+  cursor:pointer;
+}
+.card-inner{
+  border-radius:19px;
+  background:
+    radial-gradient(1200px 520px at 14% 0%, rgba(99,102,241,.14), transparent 55%),
+    radial-gradient(1200px 520px at 86% 0%, rgba(168,85,247,.10), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.030));
+  border:1px solid rgba(255,255,255,.08);
+  overflow:hidden;
+  transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.card:hover .card-inner{
+  transform:translateY(-7px);
+  box-shadow:0 26px 70px rgba(99,102,241,.28);
+  border-color:rgba(255,255,255,.16);
+}
+
+/* Thumbnail */
+.thumb{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:rgba(10,10,30,.8);
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:left top;
+  display:block;
+  transition:transform .4s ease;
+}
+.card:hover .thumb img{
+  transform:scale(1.04);
+}
+/* Platform badge overlay */
+.thumb-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.18);
+}
+.badge-n8n{
+  background:rgba(255,80,60,.18);
+  color:#ff9a8b;
+  border-color:rgba(255,80,60,.30);
+}
+.badge-zapier{
+  background:rgba(255,111,50,.18);
+  color:#ffb347;
+  border-color:rgba(255,111,50,.30);
+}
+.badge-make{
+  background:rgba(99,102,241,.20);
+  color:#a5b4fc;
+  border-color:rgba(99,102,241,.35);
+}
+
+/* View overlay on hover */
+.thumb-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(10,10,30,.72);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.card:hover .thumb-overlay{ opacity:1; }
+.thumb-overlay span{
+  padding:10px 22px;
+  border-radius:999px;
+  background:linear-gradient(135deg, #6366f1, #a855f7);
+  font-weight:800;
+  font-size:13px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.body{ padding:16px; }
+.label{
+  display:inline-block;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(165,180,252,.80);
+  margin-bottom:8px;
+}
+.title{
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:8px;
+  line-height:1.25;
+  word-break:break-word;
+  color:#fff;
+}
+.desc{
+  font-size:13px;
+  color:rgba(255,255,255,.72);
+  line-height:1.60;
+  margin-bottom:12px;
+  word-break:break-word;
+}
+
+/* Tool stack pills */
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.pill{
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:10px;
+  font-weight:800;
+  color:rgba(255,255,255,.75);
+  letter-spacing:.04em;
+}
+.pill i{ font-size:10px; opacity:.75; }
+
+/* Lightbox */
+.lightbox-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(5,5,15,.92);
+  backdrop-filter:blur(16px);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.lightbox-overlay.active{
+  opacity:1;
+  pointer-events:all;
+}
+.lightbox-inner{
+  position:relative;
+  max-width:1100px;
+  width:100%;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid rgba(99,102,241,.30);
+  box-shadow:0 40px 120px rgba(0,0,0,.7);
+  transform:scale(.95);
+  transition:transform .28s ease;
+}
+.lightbox-overlay.active .lightbox-inner{ transform:scale(1); }
+.lightbox-inner img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+.lightbox-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.20);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s;
+}
+.lightbox-close:hover{ background:rgba(255,255,255,.22); }
+.lightbox-caption{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:14px 18px;
+  background:linear-gradient(to top, rgba(5,5,15,.95), transparent);
+  font-size:13px;
+  font-weight:700;
+  color:rgba(255,255,255,.80);
+}
+
+/* ================= FOOTER ================= */
+footer{
+  background:#111;
+  padding:40px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  flex-wrap:wrap;
+}
+@media (max-width:520px){
+  .footer-inner{ justify-content:center; text-align:center; }
+}
+.muted{ color:rgba(255,255,255,.55); font-weight:700; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="assets/logo.png" alt="Logo">
+      </div>
+      <nav class="header-nav">
+        <a href="home.html#home">Home</a>
+        <div class="nav-dropdown">
+          <a class="nav-parent" href="home.html#works" aria-haspopup="true" aria-expanded="false">
+            My Works <i class="fa-solid fa-chevron-down"></i>
+          </a>
+          <div class="nav-menu" role="menu" aria-label="My Works">
+            <a role="menuitem" href="website.html">Websites</a>
+            <a role="menuitem" href="funnels.html">Funnels</a>
+            <a role="menuitem" href="ai-builds.html">AI Builds</a>
+            <a role="menuitem" href="ai-automation.html">Automations</a>
+          </div>
+        </div>
+        <a href="home.html#build">Core Skills</a>
+        <a href="home.html#experience">Experience</a>
+      </nav>
+      <a class="header-cta" href="home.html#collab">Collaborate ↗</a>
+    </div>
+  </header>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="kicker"><i class="fa-solid fa-robot"></i> AI Automation Builds</div>
+      <h1>Workflows That <span class="gradient-text">Work For You</span></h1>
+      <p class="sub">
+        Real automations I've built using n8n, Zapier, and Make — connecting your tools so repetitive tasks happen on their own, 24/7, without anyone lifting a finger.
+      </p>
+      <div class="page-actions">
+        <a class="btn btn-dark" href="home.html#works"><i class="fa-solid fa-arrow-left"></i> Back to Featured</a>
+        <a class="btn btn-outline" href="home.html#collab"><i class="fa-solid fa-calendar"></i> Let's Talk</a>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-num">9</span>
+          <span class="stat-label">Live Workflows</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Platforms</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">No-Code / Low-Code</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="grid-wrap">
+    <div class="container">
+      <div class="section-label"><i class="fa-solid fa-circle-nodes"></i> Automation Portfolio</div>
+      <div class="grid" id="automationGrid"></div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox" role="dialog" aria-modal="true">
+    <div class="lightbox-inner">
+      <img id="lightboxImg" src="" alt="">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="muted">© 2024 All rights reserved</div>
+      <div class="muted">n8n · Zapier · Make · AI Automation</div>
+    </div>
+  </footer>
+
+  <script>
+    /* ──────────────────────────────────────────
+       Automation projects data
+       thumb: paths relative to your project root
+       Replace with your actual screenshot paths.
+       These match the 9 uploaded screenshots.
+    ────────────────────────────────────────── */
+    const automations = [
+      {
+        thumb: "ai/ai-1.webp",       // Screenshot 1
+        title: "AI Chatbot with Memory",
+        desc: "Every time someone sends a message, this workflow has an AI read it, think about it — and remember previous messages so replies feel like a real conversation, not a robot reading from a script. Responses are sent back automatically.",
+        platform: "n8n",
+        tools: ["Webhook", "AI Agent", "Google Gemini", "Memory", "HTTP Request"],
+        category: "Conversational AI"
+      },
+      {
+        thumb: "ai/ai-2.webp",   // Screenshot 2
+        title: "Slack AI Assistant",
+        desc: "A Slack message triggers an AI that reads a reference document, figures out the best response, then prepares a draft email in Gmail — all without a human touching anything. Great for automating client follow-ups.",
+        platform: "n8n",
+        tools: ["Slack", "OpenAI", "Google Drive", "Gmail", "Loop"],
+        category: "Productivity AI"
+      },
+      {
+        thumb: "ai/ai-3.webp", // Screenshot 3
+        title: "Slack-to-Gmail AI Pipeline",
+        desc: "A variation of the Slack AI workflow — when a team message comes in, the AI searches Google Drive for the right documents, filters the results, waits for processing, then updates a doc and creates a ready-to-send Gmail draft.",
+        platform: "n8n",
+        tools: ["Slack", "Google Drive", "AI Agent", "Gmail", "Filter"],
+        category: "Productivity AI"
+      },
+      {
+        thumb: "ai/zap-1.webp", // Screenshot 4
+        title: "Auto Social Media Publisher",
+        desc: "Drop a file into a Google Drive folder and this automation takes over — AI writes the caption, then posts it simultaneously to Facebook, Instagram, and LinkedIn. No copy-pasting between platforms ever again.",
+        platform: "Zapier",
+        tools: ["Google Drive", "AI by Zapier", "Facebook Pages", "Instagram", "LinkedIn"],
+        category: "Social Media"
+      },
+      {
+        thumb: "ai/zap-2.webp",      // Screenshot 5
+        title: "Lead Capture & Smart Router",
+        desc: "When a form or webhook sends a lead, this workflow logs it to Google Sheets, creates a folder in Google Drive, then decides automatically: post to Facebook or send an email — depending on where the lead came from.",
+        platform: "Zapier",
+        tools: ["Webhooks", "Google Sheets", "Google Drive", "Facebook Pages", "Gmail"],
+        category: "Lead Management"
+      },
+      {
+        thumb: "ai/zap-3.webp",  // Screenshot 6
+        title: "Priority-Based Lead Triage",
+        desc: "Incoming leads are scored by urgency using custom logic. High-priority leads get an AI-written email and an instant WhatsApp notification. Low-priority leads get a separate, softer follow-up — automatically and instantly.",
+        platform: "Zapier",
+        tools: ["Webhooks", "Code", "AI by Zapier", "Google Sheets", "Gmail", "WhatsApp"],
+        category: "Lead Management"
+      },
+      {
+        thumb: "ai/zap-4.webp",  // Screenshot 7
+        title: "Client Status Email Sequences",
+        desc: "When a task status changes in Asana, this workflow knows exactly what email to send — and when. A 'Quoted' client gets a follow-up after a delay. A 'Paid and Closed' client gets a thank-you. Everything runs on autopilot.",
+        platform: "Zapier",
+        tools: ["Asana", "Gmail", "Delay by Zapier", "Google Drive", "Paths"],
+        category: "CRM Automation"
+      },
+      {
+        thumb: "ai/make-2.webp", // Screenshot 8
+        title: "Xero Financial Reconciliation Bot",
+        desc: "This workflow watches for completed tasks in Asana, pulls the matching invoice from Xero, then logs everything neatly in Google Sheets. If a transaction is reconciled, the team gets a Slack message. If not, they get a different alert.",
+        platform: "Make",
+        tools: ["Asana", "Xero", "Google Sheets", "Slack", "Router"],
+        category: "Finance Automation"
+      },
+      {
+        thumb: "ai/make-1.webp",  // Screenshot 9
+        title: "Automated Expense Tracker",
+        desc: "When a task is completed in Asana, this workflow fetches the related Xero transaction and sorts it into the right category — normal expenses, approval requests, or deleted items. Each path logs to Sheets and attaches receipts back to Asana.",
+        platform: "Make",
+        tools: ["Asana", "Xero", "Google Sheets", "Iterator", "Text Aggregator"],
+        category: "Finance Automation"
+      }
+    ];
+
+    /* Badge class map */
+    const badgeClass = {
+      "n8n": "badge-n8n",
+      "Zapier": "badge-zapier",
+      "Make": "badge-make"
+    };
+
+    const grid = document.getElementById("automationGrid");
+
+    automations.forEach((item, i) => {
+      const toolsHtml = item.tools.slice(0, 4).map(t =>
+        `<span class="pill"><i class="fa-solid fa-bolt"></i>${t}</span>`
+      ).join("");
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.index = i;
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="thumb">
+            <img loading="lazy"
+                 src="${item.thumb}"
+                 alt="Workflow screenshot: ${item.title}"
+                 onerror="this.onerror=null;this.src='https://via.placeholder.com/1600x900/0d0d1a/6366f1?text=Workflow+Screenshot';">
+            <div class="thumb-badge ${badgeClass[item.platform] || ''}">${item.platform}</div>
+            <div class="thumb-overlay">
+              <span><i class="fa-solid fa-expand"></i> View Workflow</span>
+            </div>
+          </div>
+          <div class="body">
+            <div class="label">${item.category}</div>
+            <div class="title">${item.title}</div>
+            <div class="desc">${item.desc}</div>
+            <div class="meta">${toolsHtml}</div>
+          </div>
+        </div>
+      `;
+
+      /* Open lightbox on click */
+      card.addEventListener("click", () => openLightbox(item));
+      grid.appendChild(card);
+    });
+
+    /* ── Lightbox ── */
+    const lightbox   = document.getElementById("lightbox");
+    const lbImg      = document.getElementById("lightboxImg");
+    const lbCaption  = document.getElementById("lightboxCaption");
+    const lbClose    = document.getElementById("lightboxClose");
+
+    function openLightbox(item) {
+      lbImg.src = item.thumb;
+      lbImg.alt = item.title;
+      lbCaption.textContent = item.title + " — " + item.platform;
+      lightbox.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+      document.body.style.overflow = "";
+      /* reset src after transition */
+      setTimeout(() => { lbImg.src = ""; }, 300);
+    }
+
+    lbClose.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLightbox();
+    });
+
+    /* ── Mobile dropdown ── */
+    const dd      = document.querySelector(".nav-dropdown");
+    const trigger = document.querySelector(".nav-parent");
+    if (dd && trigger) {
+      trigger.addEventListener("click", (e) => {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        if (isTouch) {
+          e.preventDefault();
+          dd.classList.toggle("open");
+          trigger.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+        }
+      });
+      document.addEventListener("click", (e) => {
+        if (!dd.contains(e.target)) {
+          dd.classList.remove("open");
+          trigger.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
